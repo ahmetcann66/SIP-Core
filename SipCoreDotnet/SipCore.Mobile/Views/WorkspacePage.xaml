@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.WorkspacePage"
+             Shell.NavBarIsVisible="False"
+             Title="Kişisel Çalışma Alanı"
+             BackgroundColor="#F8FAFC">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,32,20,20" Spacing="16">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Kişisel Çalışma Alanı" FontSize="28" FontAttributes="Bold" TextColor="#0F172A" />
+                <Label Text="Notlarını ve çalışma planını burada sakla" FontSize="14" TextColor="#64748B" />
+            </VerticalStackLayout>
+
+            <Frame Padding="16" CornerRadius="18" BackgroundColor="#FFFFFF" BorderColor="#E2E8F0" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <Entry x:Name="WorkspaceTitleEntry" Placeholder="Çalışma başlığı" TextColor="#0F172A" />
+                    <Editor x:Name="WorkspaceContentEditor"
+                            Placeholder="Buraya notlarını, hedeflerini veya kısa çalışma planını yaz..."
+                            AutoSize="TextChanges"
+                            HeightRequest="220"
+                            TextColor="#0F172A" />
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <Button Text="Kaydet" BackgroundColor="#0EA5E9" TextColor="White" CornerRadius="12" Clicked="OnSaveClicked" />
+                        <Button Grid.Column="1" Text="Yükle" BackgroundColor="#14B8A6" TextColor="White" CornerRadius="12" Clicked="OnLoadClicked" />
+                        <Button Grid.Column="2" Text="Temizle" BackgroundColor="#94A3B8" TextColor="White" CornerRadius="12" Clicked="OnClearClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Padding="16" CornerRadius="18" BackgroundColor="#ECFDF5" BorderColor="#A7F3D0" HasShadow="False">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="İpucu" FontSize="13" FontAttributes="Bold" TextColor="#065F46" />
+                    <Label Text="Bu alan webdeki çalışma alanının mobil karşılığıdır. Notları kaydet ve sonra geri dönüp devam et."
+                           FontSize="12"
+                           TextColor="#047857" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="← Dashboard'a Dön"
+                    BackgroundColor="#475569"
+                    TextColor="White"
+                    CornerRadius="12"
+                    Clicked="OnBackClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

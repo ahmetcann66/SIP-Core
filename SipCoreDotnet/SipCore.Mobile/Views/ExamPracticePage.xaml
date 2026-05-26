@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.ExamPracticePage"
+             x:Name="ExamPracticePageRoot"
+             Title="Denemeler">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#F7FAFF" Offset="0" />
+            <GradientStop Color="#ECF3FF" Offset="1" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*" Padding="0">
+        <VerticalStackLayout Grid.Row="0" Padding="18,16,18,8" Spacing="8">
+            <Label Text="📝 Deneme Simülatörü" FontSize="28" FontAttributes="Bold" TextColor="#1E293B" />
+            <Label Text="Webdeki sınav akışının mobil optimize versiyonu" FontSize="13" TextColor="#64748B" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Frame Grid.Column="0" Padding="8" CornerRadius="12" BackgroundColor="#DBEAFE" BorderColor="#93C5FD" HasShadow="False">
+                    <Label Text="{Binding SelectedExamTitle, StringFormat='Seçili: {0}'}" FontSize="11" TextColor="#1E3A8A" />
+                </Frame>
+                <Frame Grid.Column="1" Padding="8" CornerRadius="12" BackgroundColor="#DCFCE7" BorderColor="#86EFAC" HasShadow="False">
+                    <Label Text="{Binding ProgressText, StringFormat='İlerleme: {0}'}" FontSize="11" TextColor="#166534" HorizontalTextAlignment="End" />
+                </Frame>
+            </Grid>
+            <Label Text="{Binding StatusMessage}" FontSize="12" TextColor="#475569" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="14,6,14,16" Spacing="14">
+                <Frame Padding="14" CornerRadius="16" BorderColor="#FCD34D" BackgroundColor="#FFFBEB" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Sınav Havuzu" FontSize="16" FontAttributes="Bold" TextColor="#92400E" />
+                        <CollectionView ItemsSource="{Binding Exams}" SelectionMode="None" HeightRequest="250">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Margin="0,4" Padding="12" CornerRadius="12" BorderColor="#FDE68A" BackgroundColor="White" HasShadow="False">
+                                        <VerticalStackLayout Spacing="6">
+                                            <Label Text="{Binding Title}" FontSize="15" FontAttributes="Bold" TextColor="#1F2937" />
+                                            <Label Text="{Binding Description}" FontSize="12" TextColor="#6B7280" />
+                                            <HorizontalStackLayout Spacing="8">
+                                                <Label Text="{Binding DefaultQuestionCount, StringFormat='Soru {0}'}" FontSize="11" TextColor="#9CA3AF" />
+                                                <Label Text="{Binding DefaultMinutes, StringFormat='Süre {0} dk'}" FontSize="11" TextColor="#9CA3AF" />
+                                            </HorizontalStackLayout>
+                                            <Button Text="Bu denemeyi seç"
+                                                    Command="{Binding Source={x:Reference ExamPracticePageRoot}, Path=BindingContext.SelectExamCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    BackgroundColor="#F59E0B"
+                                                    TextColor="White"
+                                                    CornerRadius="10"
+                                                    FontAttributes="Bold"
+                                                    FontSize="12" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Padding="14" CornerRadius="16" BorderColor="#BFDBFE" BackgroundColor="White" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Soru Alanı" FontSize="16" FontAttributes="Bold" TextColor="#1E40AF" />
+                        <Label Text="{Binding CurrentQuestionText}" FontSize="15" TextColor="#334155" LineBreakMode="WordWrap" />
+                        <CollectionView ItemsSource="{Binding AnswerOptions}" SelectionMode="None" HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Text="{Binding .}"
+                                            Command="{Binding Source={x:Reference ExamPracticePageRoot}, Path=BindingContext.AnswerCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#EFF6FF"
+                                            TextColor="#1F2937"
+                                            CornerRadius="10"
+                                            FontSize="13"
+                                            Margin="0,4" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Grid.Column="0" Text="Denemeyi Başlat" Command="{Binding StartPracticeCommand}" BackgroundColor="#2563EB" TextColor="White" CornerRadius="10" FontAttributes="Bold" />
+                            <Button Grid.Column="1" Text="Sonraki" Command="{Binding NextQuestionCommand}" BackgroundColor="#16A34A" TextColor="White" CornerRadius="10" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Padding="14" CornerRadius="14" BorderColor="#BBF7D0" BackgroundColor="#F0FDF4" HasShadow="False">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Sonuç Özeti" FontSize="15" FontAttributes="Bold" TextColor="#166534" />
+                        <Label Text="{Binding ResultSummary}" FontSize="14" TextColor="#1F2937" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Button Text="← Dashboard'a Dön"
+                        Clicked="OnBackClicked"
+                        BackgroundColor="#334155"
+                        TextColor="White"
+                        CornerRadius="10"
+                        FontAttributes="Bold" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

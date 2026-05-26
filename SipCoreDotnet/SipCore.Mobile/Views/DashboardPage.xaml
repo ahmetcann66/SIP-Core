@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.DashboardPage"
+             Shell.NavBarIsVisible="False"
+             Title="Dashboard">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0.9,1">
+            <GradientStop Color="#0A122B" Offset="0.0" />
+            <GradientStop Color="#102453" Offset="0.48" />
+            <GradientStop Color="#1E293B" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*" Padding="0">
+        <VerticalStackLayout Grid.Row="0" Padding="18,24,18,12" Spacing="10">
+            <Label Text="SIP Control Center" FontSize="30" FontAttributes="Bold" TextColor="#F8FAFC" />
+            <Label Text="Web paneldeki tüm modüller mobilde tek noktada" FontSize="13" TextColor="#BFDBFE" />
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                <Frame Grid.Column="0" Padding="10" CornerRadius="14" BackgroundColor="#1D4ED8" BorderColor="#60A5FA" HasShadow="False">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Seviye" FontSize="11" TextColor="#DBEAFE" />
+                        <Label Text="{Binding SelectedLevel}" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1" Padding="10" CornerRadius="14" BackgroundColor="#065F46" BorderColor="#2DD4BF" HasShadow="False">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Kelime" FontSize="11" TextColor="#A7F3D0" />
+                        <Label Text="{Binding WordCount}" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="2" Padding="10" CornerRadius="14" BackgroundColor="#5B21B6" BorderColor="#C4B5FD" HasShadow="False">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Seans" FontSize="11" TextColor="#DDD6FE" />
+                        <Label Text="{Binding PomodoroSessionCount}" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <Label Text="{Binding QuickInsight}" FontSize="12" TextColor="#93C5FD" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="14" Padding="16,6,16,22">
+
+                <Frame Padding="16" CornerRadius="18" BorderColor="#7DD3FC" BackgroundColor="#0A4B6C" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="🌍 English Hub" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="Kelime öğren, forbidden listesi gör, seviyeni yönet" FontSize="12" TextColor="#E0F2FE" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Text="Yenile" Command="{Binding RefreshCommand}" BackgroundColor="#0EA5E9" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                            <Button Text="English Hub Aç" Command="{Binding GoEnglishHubCommand}" BackgroundColor="#0284C7" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Padding="16" CornerRadius="18" BorderColor="#86EFAC" BackgroundColor="#0B5D4E" HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="🚀 SIP Dashboard" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="Pomodoro, deneme, geçmiş, notlar, roadmap ve skor" FontSize="12" TextColor="#D1FAE5" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Button Text="SIP Core" Command="{Binding GoSipCoreCommand}" BackgroundColor="#10B981" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                            <Button Text="Pomodoro" Command="{Binding GoPomodoroCommand}" BackgroundColor="#059669" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Label Text="Hızlı Kısayollar" FontSize="14" FontAttributes="Bold" TextColor="#DBEAFE" Margin="2,2,2,0" />
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <Button Grid.Row="0" Grid.Column="0" Text="📖 Seviye" Command="{Binding GoLevelsCommand}" BackgroundColor="#E0E7FF" TextColor="#312E81" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="0" Grid.Column="1" Text="📝 Deneme" Command="{Binding GoExamPracticeCommand}" BackgroundColor="#FFE4D6" TextColor="#9A3412" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="1" Grid.Column="0" Text="📜 Geçmiş" Command="{Binding GoHistoryCommand}" BackgroundColor="#FEE2E2" TextColor="#991B1B" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="1" Grid.Column="1" Text="⭐ Skor" Command="{Binding GoScoreCommand}" BackgroundColor="#DBEAFE" TextColor="#1E3A8A" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="2" Grid.Column="0" Text="🗂 Workspace" Command="{Binding GoWorkspaceCommand}" BackgroundColor="#D1FAE5" TextColor="#065F46" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="2" Grid.Column="1" Text="🗺 AI Roadmap" Command="{Binding GoRoadMapCommand}" BackgroundColor="#EDE9FE" TextColor="#5B21B6" CornerRadius="14" FontAttributes="Bold" />
+                    <Button Grid.Row="3" Grid.ColumnSpan="2" Text="🧠 SIP Core Modülü" Command="{Binding GoSipCoreCommand}" BackgroundColor="#CFFAFE" TextColor="#155E75" CornerRadius="14" FontAttributes="Bold" />
+                </Grid>
+
+                <Frame Padding="12" CornerRadius="14" BackgroundColor="#0F172A" BorderColor="#334155" HasShadow="False">
+                    <Label Text="{Binding StatusMessage, StringFormat='Durum: {0}'}" FontSize="12" TextColor="#CBD5E1" />
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

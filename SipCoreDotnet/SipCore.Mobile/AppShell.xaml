@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SipCore.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SipCore.Mobile"
+    xmlns:view="clr-namespace:SipCore.Mobile.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Title="SipCore.Mobile">
+
+    <ShellContent
+        Title="Landing"
+        ContentTemplate="{DataTemplate view:LandingPage}"
+        Route="LandingPage" />
+
+    <!-- Explicit ShellContent for Auth to ensure Shell can present it directly -->
+    <ShellContent
+        Title="Giriş"
+        ContentTemplate="{DataTemplate view:AuthPage}"
+        Route="AuthPage" />
+
+</Shell>

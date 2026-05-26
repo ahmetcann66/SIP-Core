@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.MainPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#F8FBFF" Offset="0.0" />
+            <GradientStop Color="#EEF4FF" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <Grid Grid.Row="0" Padding="18,44,18,20">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.8">
+                    <GradientStop Color="#0B132B" Offset="0" />
+                    <GradientStop Color="#153E75" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="ENGLISH HUB" FontSize="24" FontAttributes="Bold" TextColor="White" CharacterSpacing="1" />
+                <Label Text="Kelime + Forbidden öğrenme modülü" FontSize="13" TextColor="#BFDBFE" />
+                <HorizontalStackLayout Spacing="8" Margin="0,6,0,0">
+                    <Frame Padding="8,4" CornerRadius="10" BackgroundColor="#0EA5E9" BorderColor="#7DD3FC" HasShadow="False">
+                        <Label Text="{Binding ActiveLevel, StringFormat='Seviye {0}'}" FontSize="12" FontAttributes="Bold" TextColor="White" />
+                    </Frame>
+                    <Frame Padding="8,4" CornerRadius="10" BackgroundColor="#1D4ED8" BorderColor="#93C5FD" HasShadow="False">
+                        <Label Text="{Binding WordItems.Count, StringFormat='Kelime {0}'}" FontSize="12" FontAttributes="Bold" TextColor="White" />
+                    </Frame>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+
+        <Frame Grid.Row="1" Margin="16,-10,16,8" Padding="12" CornerRadius="16" BackgroundColor="White" BorderColor="#D6E2F5" HasShadow="True">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <Button Grid.Column="0" Text="Yükle" Command="{Binding LoadStateCommand}" BackgroundColor="#0EA5E9" TextColor="White" CornerRadius="10" FontAttributes="Bold" FontSize="12" />
+                <Button Grid.Column="1" Text="Yenile" Command="{Binding RefreshCommand}" BackgroundColor="#2563EB" TextColor="White" CornerRadius="10" FontAttributes="Bold" FontSize="12" />
+                <Button Grid.Column="2" Text="Seviye" Clicked="OnOpenLevelsClicked" BackgroundColor="#14B8A6" TextColor="White" CornerRadius="10" FontAttributes="Bold" FontSize="12" />
+            </Grid>
+        </Frame>
+
+        <Grid Grid.Row="2">
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" Color="#1D4ED8" HorizontalOptions="Center" VerticalOptions="Center" Scale="1.3" ZIndex="10" />
+
+            <CollectionView ItemsSource="{Binding WordItems}" Margin="14,6,14,8">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Margin="0,0,0,14">
+                            <Frame CornerRadius="18" Padding="16" HasShadow="True" BorderColor="#D8E3F4" BackgroundColor="White" ZIndex="2">
+                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="10">
+                                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="3">
+                                        <Label Text="{Binding English}" FontSize="24" FontAttributes="Bold" TextColor="#0F172A" />
+                                        <Label Text="{Binding Turkish}" FontSize="15" TextColor="#475569" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Row="0" Grid.Column="1" Text="🧩" FontSize="24" VerticalOptions="Center" />
+
+                                    <Frame Grid.Row="1" Grid.ColumnSpan="2" Padding="0" CornerRadius="11" BorderColor="#FCA5A5" BackgroundColor="#FFF1F2" HasShadow="False">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnForbiddenTapped" />
+                                        </Frame.GestureRecognizers>
+                                        <Label Text="Forbidden words aç/kapat" FontSize="12" FontAttributes="Bold" TextColor="#B91C1C" HorizontalOptions="Center" Padding="0,9" />
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+
+                            <Frame IsVisible="False" Opacity="0" Margin="12,-10,12,0" Padding="14" CornerRadius="14" BackgroundColor="#FEF2F2" BorderColor="#FECACA" HasShadow="True" ZIndex="1">
+                                <Label Text="{Binding ForbiddenWords, StringFormat='✓ {0}'}" FontSize="13" TextColor="#1F2937" LineBreakMode="WordWrap" />
+                            </Frame>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <Grid Grid.Row="3" Padding="14,6,14,14" ColumnDefinitions="*,Auto">
+            <Label Grid.Column="0" Text="{Binding StatusMessage, StringFormat='Durum: {0}'}" FontSize="12" TextColor="#475569" VerticalOptions="Center" />
+            <Button Grid.Column="1" Text="Dashboard" Clicked="OnOpenDashboardClicked" BackgroundColor="#0F172A" TextColor="White" CornerRadius="12" FontSize="12" Padding="12,8" />
+        </Grid>
+    </Grid>
+</ContentPage>

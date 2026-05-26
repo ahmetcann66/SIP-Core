@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.SipCorePage"
+             Title="SIP Core"
+             BackgroundColor="#F5F7FA">
+    
+    <VerticalStackLayout Padding="20" Spacing="16">
+        
+        <!-- Header -->
+        <VerticalStackLayout Spacing="8">
+            <Label Text="🧠 SIP Core AI" FontSize="28" FontAttributes="Bold" TextColor="#2C3E50" />
+            <Label Text="Öğrenme DNA'sı ve Materyal Üretimi" FontSize="14" TextColor="#7F8C8D" />
+        </VerticalStackLayout>
+
+        <!-- Info Card -->
+        <Frame Padding="16" CornerRadius="12" BorderColor="#9B59B6" BackgroundColor="#F4ECF7" HasShadow="True">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="💡 SIP Core Nedir?" FontSize="14" FontAttributes="Bold" TextColor="#8E44AD" />
+                <Label Text="• Öğrenme DNA analizi" FontSize="12" TextColor="#7F8C8D" />
+                <Label Text="• Kişiselleştirilmiş öğrenme" FontSize="12" TextColor="#7F8C8D" />
+                <Label Text="• Otomatik materyal üretimi" FontSize="12" TextColor="#7F8C8D" />
+                <Label Text="• AI destekli rehberlik" FontSize="12" TextColor="#7F8C8D" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Modules List -->
+        <Label Text="Modüller" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50" />
+        
+        <ScrollView>
+            <CollectionView ItemsSource="{Binding Modules}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32" Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="📭" FontSize="40" HorizontalTextAlignment="Center" />
+                        <Label Text="Henüz modül yüklenmedi" TextColor="#95A5A6" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="16" Margin="0,6" CornerRadius="12" BorderColor="#9B59B6" BackgroundColor="#FFFFFF" HasShadow="True">
+                            <HorizontalStackLayout Spacing="12">
+                                <Label Text="📖" FontSize="20" VerticalOptions="Center" />
+                                <Label Text="{Binding}" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                                <Button Text="→"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectModuleCommand}"
+                                    CommandParameter="{Binding}"
+                                    BackgroundColor="#9B59B6"
+                                    TextColor="White"
+                                    CornerRadius="6"
+                                    Padding="8,4"
+                                    FontSize="12" />
+                            </HorizontalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- Bottom Navigation -->
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <Button Grid.Column="0" 
+                    Text="📜 Geçmiş" 
+                    Command="{Binding GoHistoryCommand}"
+                    BackgroundColor="#E67E22"
+                    TextColor="White"
+                    CornerRadius="8"
+                    FontSize="12"
+                    Padding="12,10" />
+            <Button Grid.Column="1" 
+                    Text="⭐ Skorlar" 
+                    Command="{Binding GoScoreCommand}"
+                    BackgroundColor="#27AE60"
+                    TextColor="White"
+                    CornerRadius="8"
+                    FontSize="12"
+                    Padding="12,10" />
+        </Grid>
+
+        <!-- Back Button -->
+        <Button Text="← Dashboard'a Dön" 
+                Command="{Binding GoDashboardCommand}"
+                BackgroundColor="#95A5A6"
+                TextColor="White"
+                CornerRadius="8"
+                FontSize="13"
+                Padding="12,8" />
+    </VerticalStackLayout>
+</ContentPage>

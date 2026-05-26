@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.LandingPage"
+             Shell.NavBarIsVisible="False"
+             Title="Welcome">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#030B26" Offset="0.0" />
+            <GradientStop Color="#0D1F52" Offset="0.55" />
+            <GradientStop Color="#143B67" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="22,42,22,20">
+        <VerticalStackLayout Grid.Row="0" Spacing="10" HorizontalOptions="Center">
+            <Label Text="🎓" FontSize="54" HorizontalTextAlignment="Center" />
+            <Label Text="S.I.P. Core" FontSize="36" FontAttributes="Bold" TextColor="#F8FAFC" HorizontalTextAlignment="Center" />
+            <Label Text="Eğitim Ekosistemi" FontSize="20" FontAttributes="Bold" TextColor="#22D3EE" HorizontalTextAlignment="Center" />
+            <Label Text="Öğrenme DNA'nı analiz eden mobil asistan" FontSize="13" TextColor="#BFDBFE" HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1" Margin="0,18,0,12">
+            <VerticalStackLayout Spacing="14">
+                <Frame Padding="18" CornerRadius="20" BorderColor="#38BDF8" BackgroundColor="#0F3A63" HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0" Text="📚" FontSize="26" VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="English Hub" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="107+ kelime, forbidden listesi, seviye tabanlı içerik" FontSize="12" TextColor="#BFDBFE" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <Frame Padding="18" CornerRadius="20" BorderColor="#A78BFA" BackgroundColor="#3B1C74" HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0" Text="⏱" FontSize="26" VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="Pomodoro Masası" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Başlat, duraklat, tur kaydı, geçmiş ve oturum özeti" FontSize="12" TextColor="#E9D5FF" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <Frame Padding="18" CornerRadius="20" BorderColor="#2DD4BF" BackgroundColor="#054B45" HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0" Text="🧠" FontSize="26" VerticalOptions="Center" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="SIP Dashboard" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Deneme, skor, roadmap, history ve workspace modülleri" FontSize="12" TextColor="#A7F3D0" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="10">
+            <Button x:Name="DashboardButton"
+                    Text="🚀 Dashboard'a Gir"
+                    Clicked="OnDashboardClicked"
+                    BackgroundColor="#0EA5E9"
+                    TextColor="White"
+                    CornerRadius="16"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Padding="16,14"
+                    HeightRequest="54" />
+
+            <Button x:Name="AuthButton"
+                    Text="👤 Giriş / Kayıt"
+                    Clicked="OnAuthClicked"
+                    BackgroundColor="#334155"
+                    TextColor="White"
+                    CornerRadius="16"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    Padding="16,12"
+                    HeightRequest="50" />
+
+            <Label Text="© 2026 S.I.P. Core"
+                   FontSize="10"
+                   TextColor="#94A3B8"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

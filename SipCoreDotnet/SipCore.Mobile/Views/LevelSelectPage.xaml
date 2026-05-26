@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.LevelSelectPage"
+             x:Name="LevelSelectPageRoot"
+             Title="Seviye Seçimi"
+             BackgroundColor="#F5F7FA">
+    
+    <VerticalStackLayout Padding="20" Spacing="16">
+        
+        <!-- Header -->
+        <VerticalStackLayout Spacing="8">
+            <Label Text="📊 Seviye Seç" FontSize="28" FontAttributes="Bold" TextColor="#2C3E50" />
+            <Label Text="Başlangıç seviyesi seçin" FontSize="14" TextColor="#7F8C8D" />
+        </VerticalStackLayout>
+
+        <!-- Difficulty Levels Grid -->
+        <CollectionView ItemsSource="{Binding Levels}" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="32" Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="📭" FontSize="40" HorizontalTextAlignment="Center" />
+                    <Label Text="Henüz seviye yüklenmedi" TextColor="#95A5A6" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" 
+                                 HorizontalItemSpacing="12"
+                                 VerticalItemSpacing="12" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="16" CornerRadius="12" BorderColor="#3498DB" BackgroundColor="#FFFFFF" HasShadow="True">
+                        <VerticalStackLayout Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                            <!-- Difficulty Icon -->
+                            <Label Text="🎯" FontSize="32" HorizontalTextAlignment="Center" />
+                            
+                            <!-- Level Name -->
+                                <Label Text="{Binding DisplayName}" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50" HorizontalTextAlignment="Center" />
+                            
+                            <!-- Select Button -->
+                            <Button Text="Seç" 
+                                    Clicked="OnSelectClicked"
+                                    CommandParameter="{Binding Code}"
+                                    BackgroundColor="#3498DB"
+                                    TextColor="White"
+                                    CornerRadius="6"
+                                    FontSize="12"
+                                    Padding="16,8"
+                                    HorizontalOptions="FillAndExpand" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Status Message -->
+        <Frame Padding="16" CornerRadius="12" BorderColor="#D6EAF8" BackgroundColor="#FFFFFF" HasShadow="False">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Seçili Seviye" FontSize="13" FontAttributes="Bold" TextColor="#2C3E50" />
+                <Label Text="{Binding SelectedLevel}" FontSize="15" FontAttributes="Bold" TextColor="#3498DB" />
+                <Label Text="{Binding SelectedLevelHint}" FontSize="11" TextColor="#7F8C8D" LineBreakMode="WordWrap" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <Label Text="{Binding StatusMessage}"
+               TextColor="#E74C3C" 
+               HorizontalTextAlignment="Center"
+               FontSize="12" />
+
+        <!-- Description -->
+        <Frame Padding="16" CornerRadius="12" BorderColor="#BDC3C7" BackgroundColor="#FFFFFF">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="💡 İpucu" FontSize="13" FontAttributes="Bold" TextColor="#2C3E50" />
+                <Label Text="Başlangıç seviyesi seçtikten sonra, kişiselleştirilmiş bir öğrenme planı oluşturulacak." 
+                       FontSize="11" 
+                       TextColor="#7F8C8D" 
+                       LineBreakMode="WordWrap" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Back Button -->
+        <Button Text="← Dashboard'a Dön" 
+            Clicked="OnBackClicked"
+                BackgroundColor="#95A5A6"
+                TextColor="White"
+                CornerRadius="8"
+                FontSize="13"
+                Padding="12,8" />
+    </VerticalStackLayout>
+</ContentPage>

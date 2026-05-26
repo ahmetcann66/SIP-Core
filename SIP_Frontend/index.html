@@ -1,0 +1,989 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.I.P. Core AI | Eğitimin Yeni Çağı</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%234f46e5'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-size='14' fill='white' font-family='Arial'%3ES%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS (via CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm" aria-label="Ana menü">
+            <div class="container-fluid px-3 px-lg-4">
+                <a class="navbar-brand fw-bold" href="#" id="navBrandHome" title="Ana sayfa">
+                    <i class="fa-solid fa-atom text-info"></i> S.I.P. Core
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNavbar" aria-controls="siteNavbar" aria-expanded="false" aria-label="Menüyü aç">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="siteNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#" data-nav-target="landingEkrani">Ana Sayfa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-nav-target="authEkrani">Giriş</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-nav-target="anaKapiEkrani">Ana Kapı</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-nav-target="seviyeSecimEkrani">English Hub</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-nav-target="sipDashboardEkrani">SIP Panel</a></li>
+                    </ul>
+                    <span class="navbar-text small text-white-50 d-none d-md-inline">Akıllı eğitim platformu</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="landingEkrani" class="screen active full-screen">
+        <div class="landing-bg-motion" aria-hidden="true"></div>
+        <div class="landing-overlay">
+            <div class="landing-content">
+                <i class="fa-solid fa-atom fa-spin-pulse" style="font-size:4rem; color:#60a5fa; margin-bottom:20px; filter:drop-shadow(0 0 15px #60a5fa);"></i>
+                <h1 data-i18n="landing_title">Eğitim Ekosistemi</h1>
+                <p data-i18n="landing_sub">Öğrenme DNA'nı analiz eden, sana özel yol haritaları çizen ve yapay zeka ile desteklenen dünyanın en akıllı eğitim asistanı.</p>
+                <button id="landingCtaBtn" class="btn-primary landing-btn modern-shadow pulse">
+                    <span data-i18n="landing_cta">Sisteme Giriş Yap</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="authEkrani" class="screen full-screen">
+    <div class="background-animation"></div>
+    <div class="auth-wrapper">
+        <div class="auth-card glass-card">
+            <i class="fa-solid fa-user-astronaut auth-icon"></i>
+            <h2 class="card-title" style="margin-bottom: 15px;">S.I.P. Core</h2>
+            
+            <div class="role-selector" style="display: flex; gap: 10px; margin-bottom: 20px; padding: 5px; background: rgba(0,0,0,0.1); border-radius: 12px;">
+                <button type="button" id="roleStudent" style="flex: 1; padding: 10px; border: none; border-radius: 8px; background-color: #4f46e5; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                    🎓 Öğrenci
+                </button>
+                <button type="button" id="roleTeacher" style="flex: 1; padding: 10px; border: none; border-radius: 8px; background-color: transparent; color: #6b7280; font-weight: bold; cursor: pointer; transition: 0.3s;">
+                    👨‍🏫 Öğretmen
+                </button>
+            </div>
+            <div class="auth-toggle">
+                <button id="btnGirisToggle" class="active"><span data-i18n="login">Giriş Yap</span></button>
+                <button id="btnKayitToggle"><span data-i18n="register">Kayıt Ol</span></button>
+            </div>
+
+            <form id="girisFormu" class="auth-form active" onsubmit="girisYap(event)">
+                <input type="email" id="loginEmail" class="modern-input" placeholder="E-posta Adresin" required>
+                <input type="password" id="loginSifre" class="modern-input" placeholder="Şifren" required>
+                <label class="checkbox-item" style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+                    <input type="checkbox" id="rememberMeCb"> <span>Beni hatırla</span>
+                </label>
+                <button type="submit" class="btn btn-primary w-100 modern-shadow pulse"><span data-i18n="login">Giriş Yap</span> <i class="fa-solid fa-right-to-bracket"></i></button>
+                <div id="loginHata" class="modern-feedback warning-bg mt-20" style="display:none; padding:10px;"></div>
+            </form>
+
+            <form id="kayitFormu" class="auth-form" onsubmit="kayitOl(event)">
+                <input type="text" id="regIsim" class="modern-input" placeholder="Adın Soyadın" required>
+                <input type="email" id="regEmail" class="modern-input" placeholder="E-posta Adresin" required>
+                <input type="password" id="regSifre" class="modern-input" placeholder="Şifre Belirle" required>
+                <button type="submit" class="btn btn-success w-100 modern-shadow">Hesap Oluştur <i class="fa-solid fa-user-plus"></i></button>
+                <div id="regHata" class="modern-feedback warning-bg mt-20" style="display:none; padding:10px;"></div>
+            </form>
+            <button id="demoContinueBtn" class="btn btn-outline-primary w-100 mt-12">Demo Olarak Devam Et (Giriş Yapmadan)</button>
+        </div>
+    </div>
+</div>
+    <!-- Post-login seçim modal (English veya SIP) -->
+    <div id="postLoginChoiceModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center;">
+        <div class="modal auth-choice-modal">
+            <h3 data-i18n="post_choice_title">Hoşgeldin! Nereden başlamak istersin?</h3>
+            <div style="display:flex; gap:10px; margin-top:12px; width:100%;">
+                <button id="chooseEnglishBtn" class="btn btn-primary w-50"><span data-i18n="post_choice_english">English Hub</span></button>
+                <button id="chooseSipBtn" class="btn btn-success w-50"><span data-i18n="post_choice_sip">SIP Dashboard</span></button>
+            </div>
+            <button id="postLoginChoiceLaterBtn" class="btn btn-secondary mt-12">Sonra Seçerim</button>
+        </div>
+    </div>
+    <main class="site-main container" id="appMain" role="main">
+        <div class="background-animation"></div>
+
+        <section id="anaKapiEkrani" class="screen" aria-label="Ana kapı">
+            <div class="gateway-header">
+                <i class="fa-solid fa-graduation-cap fa-3x" style="color:white; margin-bottom:15px; filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));"></i>
+                <h1 data-i18n="gateway_heading" style="color:white; font-size:2.8rem; font-weight:800; letter-spacing:-1px;">Eğitim Ekosistemi</h1>
+                <p data-i18n="gateway_sub" style="color:rgba(255,255,255,0.9); font-size:1.1rem;">Lütfen hedefine uygun modülü seç</p>
+            </div>
+            <div class="gateway-grid">
+                <div id="gatewayEnglishCard" class="gateway-card solid-card bg-english">
+                    <i class="fa-solid fa-earth-americas gw-icon"></i>
+                    <h2 class="text-white"><span data-i18n="english_hub">English Hub</span></h2>
+                    <p class="text-white">Yapay Zeka Destekli İngilizce Öğrenme Platformu. Kelime ezberle, konuş, Tabu oyna.</p>
+                </div>
+                <div id="gatewaySipCard" class="gateway-card solid-card bg-sip">
+                    <i class="fa-solid fa-brain gw-icon"></i>
+                    <h2 class="text-white"><span data-i18n="sip_dashboard">SIP Dashboard</span></h2>
+                    <p class="text-white">Öğrenci Yönetim Paneli. Akademik derslerini, sınavlarını ve çalışma geçmişini yönet.</p>
+                </div>
+            </div>
+            <div id="ogrenciBildirimPaneli" class="student-notification-panel" style="display:none;">
+                <div class="student-notification-head">
+                    <h3>Gelen Bildirimler</h3>
+                    <span id="ogrenciBildirimSayisi">0</span>
+                </div>
+                <div id="ogrenciBildirimListesi" class="student-notification-list"></div>
+            </div>
+        </section>
+
+        <section id="sipDashboardEkrani" class="screen" aria-label="SIP Dashboard">
+            <div class="settings-card glass-card" style="max-width: 850px; margin: 0 auto; text-align: left;">
+                <div class="premium-dashboard-hero">
+                    <div class="premium-dashboard-copy">
+                        <div class="premium-dashboard-kicker">SIP Control Center</div>
+                        <h2 class="card-title premium-dashboard-title" style="margin-bottom: 10px; text-align: left;"><i class="fa-solid fa-chart-line"></i> Akademik Panel (SIP)</h2>
+                        <p class="subtitle premium-dashboard-subtitle" style="text-align:left; margin-bottom:0; max-width: 560px;">Günlük performansını, sınav hazırlığını ve odak sürelerini tek ekrandan takip et.</p>
+                    </div>
+                    <div class="premium-dashboard-actions">
+                        <button id="btnToGate" class="btn-small modern-btn-outline"><i class="fa-solid fa-door-open"></i> Ana Kapı</button>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <div class="premium-dashboard-chip"><i class="fa-solid fa-star"></i> Premium görünüm</div>
+                            <button id="localeToggleBtn" class="btn-small modern-btn-outline" title="Dil değiştir"><i class="fa-solid fa-globe"></i> TR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-metric-strip">
+                    <div class="premium-metric"><span>Bugün</span><strong id="sipGunlukSureTxtMini">0dk</strong>
+                        <svg id="sipSparklineSure" class="sparkline" width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="none"><path d="" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                    <div class="premium-metric"><span>Soru</span><strong id="sipGunlukSoruTxtMini">0</strong>
+                        <svg id="sipSparklineSoru" class="sparkline" width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="none"><path d="" fill="none" stroke="#0ea5a1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                    <div class="premium-metric"><span>Seri</span><strong id="sipStreakTxtMini">0 Gün</strong>
+                        <svg id="sipSparklineStreak" class="sparkline" width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="none"><path d="" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </div>
+                </div>
+
+                <div class="premium-shortcuts-row">
+                    <button id="premiumShortcutPomodoro" type="button" class="premium-shortcut-btn"><i class="fa-solid fa-stopwatch"></i><span>Odak</span></button>
+                    <button id="premiumShortcutSinav" type="button" class="premium-shortcut-btn"><i class="fa-solid fa-file-circle-question"></i><span>Deneme</span></button>
+                    <button id="premiumShortcutGecmis" type="button" class="premium-shortcut-btn"><i class="fa-solid fa-clock-rotate-left"></i><span>Geçmiş</span></button>
+                    <button id="premiumShortcutWorkspace" type="button" class="premium-shortcut-btn"><i class="fa-solid fa-pen-to-square"></i><span>Notlar</span></button>
+                </div>
+
+                <div class="xp-container modern-xp-bar" style="background:#e0e7ff; margin-bottom: 15px;">
+                    <div class="xp-header"><span id="sipLevelTxtTxt" style="color:#4338ca;">Level 1 Akademik Başarı</span><span id="sipXpTxt">0 / 100 XP</span></div>
+                    <div class="xp-bar-bg" style="background:#c7d2fe;"><div class="xp-bar-fill" id="sipXpBarFill" style="background: linear-gradient(90deg, #4f46e5, #312e81);"></div></div>
+                </div>
+
+                <div class="sip-stats-grid">
+                    <div class="sip-stat-box"><i class="fa-solid fa-clock text-primary"></i><div class="sip-stat-info"><span>Bugün Çalışma</span><strong id="sipGunlukSureTxt">0dk</strong></div></div>
+                    <div class="sip-stat-box"><i class="fa-solid fa-check-double text-success"></i><div class="sip-stat-info"><span>Bugün Soru</span><strong id="sipGunlukSoruTxt">0</strong></div></div>
+                    <div class="sip-stat-box"><i class="fa-solid fa-fire text-danger"></i><div class="sip-stat-info"><span>Seri (Streak)</span><strong id="sipStreakTxt">0 Gün</strong></div></div>
+                </div>
+
+                <div class="sip-action-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 18px;">
+                    <div id="sipActionPomodoro" class="sip-action-card solid-card" style="grid-column: span 2; background: linear-gradient(135deg, #10b981, #047857);">
+                        <i class="fa-solid fa-stopwatch-20 fa-3x mb-10 text-white" style="margin-bottom:10px;"></i>
+                        <h4 class="text-white" style="font-size:1.4rem;">Pomodoro Masası</h4>
+                        <p class="text-white" style="opacity:0.9;">Hemen ders çalışmaya başla ve süreni kaydet!</p>
+                    </div>
+
+                    <div id="sipActionCore" class="sip-action-card solid-card bg-core">
+                        <i class="fa-solid fa-wand-magic-sparkles fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">SIP Core AI Stüdyosu</h4>
+                    </div>
+                    <div id="sipActionGecmis" class="sip-action-card solid-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="fa-solid fa-book-journal-whills fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">Çalışma Geçmişi</h4>
+                    </div>
+                    
+                    <div id="sipActionSinav" class="sip-action-card solid-card bg-sinav">
+                        <i class="fa-solid fa-stopwatch fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">Deneme Simülatörü</h4>
+                    </div>
+                    <div id="sipActionPuan" class="sip-action-card solid-card bg-puan">
+                        <i class="fa-solid fa-calculator fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">Puan Hesaplama</h4>
+                    </div>
+                    <div id="sipActionWorkspace" class="sip-action-card solid-card bg-workspace">
+                        <i class="fa-solid fa-pen-to-square fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">Kişisel Çalışma Alanı</h4>
+                    </div>
+                    <div id="sipActionRoad" class="sip-action-card solid-card bg-road">
+                        <i class="fa-solid fa-network-wired fa-2x mb-10 text-white"></i>
+                        <h4 class="text-white">AI Sınav Haritası</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- POMODORO SAYACI EKRANI (GÜNCELLENDİ) -->
+        <div id="sipPomodoroEkrani" class="screen">
+            <div class="settings-card glass-card text-center" style="max-width: 600px; margin: 0 auto; position: relative;">
+                <h2 class="card-title">⏳ Pomodoro Masası</h2>
+                
+                <!-- Pomodoro Kurulum -->
+                <div id="pomoSetupDiv">
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Lütfen çalışma modunu seç ve masaya otur.</p>
+                    <select id="pomoModeSelect" class="modern-input">
+                        <option value="25,5,20,4">Klasik (25dk Çalış / 5dk Mola) - 4 Döngü</option>
+                        <option value="45,15,20,3">Rahat (45dk Çalış / 15dk Mola) - 3 Döngü</option>
+                        <option value="50,10,30,2">Derin Odak (50dk Çalış / 10dk Mola) - 2 Döngü</option>
+                        <option value="90,20,30,2">Maraton (90dk Çalış / 20dk Mola) - 2 Döngü</option>
+                    </select>
+                    <button type="button" id="initPomodoroBtn" class="btn btn-primary w-100 modern-shadow pulse mt-20" style="font-size:1.2rem; padding:15px;"><i class="fa-solid fa-chair"></i> Seansa Başla</button>
+                    <button id="pomodoroBackBtn" class="btn btn-secondary w-100 mt-10">Geri Dön</button>
+                </div>
+
+                <!-- Pomodoro Aktif Sayaç -->
+                <div id="pomoActiveDiv" style="display:none;">
+                    <div id="pomoFocusBanner" class="pomo-focus-banner" style="display:none;" role="status">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <div class="pomo-focus-banner-body">
+                            <strong>Tam odak zamanı</strong>
+                            <p>Telefonu sessize al; sayaç başladı. İstediğin zaman duraklatabilir veya masadan kalkabilirsin.</p>
+                            <label class="checkbox-item" style="margin-top:8px;">
+                                <input type="checkbox" id="pomoHideFocusCb"> <span>Bugün bir daha gösterme</span>
+                            </label>
+                        </div>
+                        <button type="button" id="pomoFocusBannerDismiss" class="btn btn-primary btn-sm">Tamam</button>
+                    </div>
+                    <div id="pomoPhaseText" style="font-size:1.2rem; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:2px; margin-bottom:10px;">ÇALIŞMA ZAMANI</div>
+                    <div id="pomoCycleText" style="font-size:0.9rem; font-weight:700; color:var(--text-muted); margin-bottom:10px; background:#f3f4f6; display:inline-block; padding:5px 15px; border-radius:20px;">Döngü: 1 / 4</div>
+                    
+                    <div class="timer-display" id="pomodoroTimerDisplay">25:00</div>
+                    
+                    <div style="font-size:0.9rem; color:var(--success); font-weight:600; margin-bottom:20px;"><i class="fa-solid fa-chart-line"></i> Toplam Çalışma: <span id="pomoTotalWorkLabel">0 dk</span></div>
+
+                    <div class="pomo-control-row">
+                        <button type="button" id="btnPomoPause" class="btn btn-warning modern-shadow pomo-ctrl-btn"><i class="fa-solid fa-pause"></i> Duraklat</button>
+                        <button type="button" id="btnPomoStop" class="btn btn-danger modern-shadow pomo-ctrl-btn"><i class="fa-solid fa-stop"></i> Masadan Kalk</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POMODORO ODAK UYARISI MODALI -->
+        <div id="pomoFocusModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center;">
+            <div class="glass-card" style="width: 90%; max-width: 400px; background:white; position:relative; z-index:1001; padding:30px; text-align:center; border:3px solid var(--primary);">
+                <i class="fa-solid fa-bullseye fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+                <h3 style="color:var(--text-main); margin-bottom:15px; font-size:1.5rem;">Tam Odak Zamanı!</h3>
+                <p style="margin-bottom:20px; color:var(--text-muted); font-size:0.95rem; line-height:1.6;">Lütfen telefonunu sessize al, sosyal medyayı kapat ve sadece hedefine odaklan. Başarabilirsin!</p>
+                <div style="text-align:left; margin-bottom:20px; background:#f9fafb; padding:10px; border-radius:8px;">
+                    <label class="checkbox-item" style="font-weight:600;">
+                        <input type="checkbox" id="pomoHideFocusCb"> <span>Bugün bir daha gösterme</span>
+                    </label>
+                </div>
+                <button id="pomoModalStartBtn" class="btn btn-primary w-100 modern-shadow pulse" style="font-size:1.1rem;">Anlaşıldı, Başla!</button>
+            </div>
+        </div>
+
+        <!-- POMODORO MOLA MODALI -->
+        <div id="pomoBreakModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center;">
+            <div class="glass-card" style="width: 90%; max-width: 400px; background:white; position:relative; z-index:1001; padding:30px; text-align:center; border:3px solid var(--success);">
+                <i class="fa-solid fa-mug-hot fa-3x" style="color:var(--success); margin-bottom:15px; animation:bounce 2s infinite;"></i>
+                <h3 style="color:var(--text-main); margin-bottom:10px; font-size:1.5rem;">Süre Doldu! Mola Zamanı</h3>
+                <p id="pomoBreakQuote" style="margin-bottom:25px; color:var(--text-muted); font-size:1.05rem; font-style:italic; line-height:1.6;">"Kalk bir su iç, böbreklerin bayram etsin!"</p>
+                <button id="pomoModalStartBreakBtn" class="btn btn-success w-100 modern-shadow pulse" style="font-size:1.1rem;"><i class="fa-solid fa-play"></i> Molayı Başlat</button>
+            </div>
+        </div>
+
+        <!-- POMODORO BİTİŞ & KAYIT MODALI -->
+        <div id="pomodoroLogModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center;">
+            <div class="glass-card" style="width: 90%; max-width: 450px; background:white; position:relative; z-index:1001; padding:30px; text-align:left;">
+                <h3 style="color:var(--primary); margin-bottom:15px; font-size:1.5rem;"><i class="fa-solid fa-clipboard-check"></i> Masadan Kalktın.</h3>
+                <p style="margin-bottom:15px; color:var(--text-muted);">Emeğini kaydetmek için ne çalıştığını bize söyle.</p>
+                <div style="font-size:1.2rem; font-weight:bold; margin-bottom:15px;">⏱ Net Çalışılan Süre: <span id="logModalTimeTxt" style="color:var(--success);">00:00</span></div>
+                
+                <select id="logSinav" class="modern-input">
+                    <!-- JS ile Sınavlar Gelecek -->
+                </select>
+                
+                <select id="logDers" class="modern-input">
+                    <option value="">Önce Sınav Seçin</option>
+                </select>
+                
+                <label class="input-label" style="margin-bottom:5px;">Çalıştığın Konular (Çoklu Seçim)</label>
+                <div id="logKonuContainer" class="checkbox-grid" style="margin-bottom:15px; max-height:150px; overflow-y:auto; padding:10px; border:2px solid #e5e7eb; border-radius:12px; background:#f9fafb;">
+                    <div style="color:var(--text-muted); font-size:0.9rem;">Önce ders seçin.</div>
+                </div>
+                
+                <input type="number" id="logSoru" class="modern-input" placeholder="Kaç Soru Çözdün? (Sadece sayı gir)">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                    <input type="number" id="logDogru" class="modern-input" placeholder="Doğru">
+                    <input type="number" id="logYanlis" class="modern-input" placeholder="Yanlış">
+                </div>
+                
+                <button id="pomoSaveBtn" class="btn btn-success w-100 modern-shadow pulse mt-20"><i class="fa-solid fa-save"></i> Kaydet ve Başarıyı Kutla!</button>
+                <button id="pomodoroLogCloseNoSaveBtn" class="btn btn-secondary w-100 mt-10">Kaydetmeden Çık</button>
+            </div>
+        </div>
+
+        <!-- LEVEL UP MODALI -->
+        <div id="levelUpModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center;">
+            <div class="glass-card level-up-box" style="width: 90%; max-width: 450px; text-align:center; padding:40px;">
+                <i class="fa-solid fa-trophy text-warning fa-bounce" style="font-size: 5rem; margin-bottom:20px;"></i>
+                <h2 style="color:var(--primary); font-size:2rem; margin-bottom:10px;">TEBRİKLER!</h2>
+                <h3 style="margin-bottom:20px;">Level <span id="yeniLevelTxt" style="color:var(--danger); font-size:2.5rem;"></span> oldun!</h3>
+                <p id="motivationalQuote" style="font-style:italic; color:var(--text-muted); font-size:1.1rem; line-height:1.6; margin-bottom:25px;">"Disiplin, hedeflerinle başarı arasındaki köprüdür!"</p>
+                <button id="levelUpContinueBtn" class="btn btn-primary w-100 modern-shadow">Devam Et</button>
+            </div>
+        </div>
+
+        <!-- ÇALIŞMA GEÇMİŞİ EKRANI -->
+        <div id="sipGecmisEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                <h2 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Çalışma Geçmişin</h2>
+                <div id="gecmisListeAlani" style="max-height: 400px; overflow-y:auto; padding-right:10px;">
+                    <!-- JS ile dolacak -->
+                </div>
+                <button class="btn btn-secondary w-100 mt-20 back-to-dashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <!-- PUAN HESAPLAMA EKRANI -->
+        <div id="sipPuanEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 600px; margin:0 auto;">
+                <h2 class="card-title">🧮 Net & Puan Hesaplama</h2>
+                <select id="hesaplamaTuru" class="modern-input">
+                    <option value="tyt">YKS / TYT Puanı</option>
+                    <option value="ayt_say">YKS / AYT (Sayısal) Puanı</option>
+                    <option value="ayt_ea">YKS / AYT (Eşit Ağırlık) Puanı</option>
+                    <option value="kpss">KPSS Lisans (GY-GK)</option>
+                    <option value="ales">ALES Puanı</option>
+                    <option value="dgs">DGS Puanı</option>
+                    <option value="lgs">LGS Puanı</option>
+                </select>
+                <div id="hesaplamaAlanlari" class="settings-grid"></div>
+                <button id="sipPuanHesaplaBtn" class="btn btn-success w-100 mt-20 modern-shadow pulse">Hesapla & Simüle Et</button>
+                <div id="puanSonuc" class="modern-feedback mt-20" style="display:none;"></div>
+                <button class="btn btn-secondary w-100 mt-20 back-to-dashboard">Geri Dön</button>
+            </div>
+        </div>
+
+        <!-- İNGİLİZCE VE DİĞER EKRANLAR -->
+        <div id="seviyeSecimEkrani" class="screen">
+            <div class="level-grid-container">
+                <button class="btn-small btn-go-back" style="background:rgba(255,255,255,0.2); color:white; border:none; margin-bottom:20px; border-radius:10px;"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_to_gate">Ana Kapıya Dön</span></button>
+                <h2 class="section-title" data-i18n="choose_level_title">İngilizce Eğitim: Seviyeni Seç</h2>
+                <div class="gateway-grid">
+                    <div class="gateway-card solid-card bg-a1 gateway-level" data-level="A1">
+                        <i class="fa-solid fa-seedling gw-icon"></i><h3 class="text-white">A1</h3><span class="text-white">Başlangıç</span>
+                    </div>
+                    <div class="gateway-card solid-card bg-a2 gateway-level" data-level="A2">
+                        <i class="fa-solid fa-leaf gw-icon"></i><h3 class="text-white">A2</h3><span class="text-white">Temel</span>
+                    </div>
+                    <div class="gateway-card solid-card bg-b1 gateway-level" data-level="B1">
+                        <i class="fa-solid fa-tree gw-icon"></i><h3 class="text-white">B1</h3><span class="text-white">Orta</span>
+                    </div>
+                    <div class="gateway-card solid-card bg-b2 gateway-level" data-level="B2">
+                        <i class="fa-solid fa-mountain gw-icon"></i><h3 class="text-white">B2</h3><span class="text-white">Orta Üstü</span>
+                    </div>
+                    <div class="gateway-card solid-card bg-c1 gateway-level" data-level="C1">
+                        <i class="fa-solid fa-plane-departure gw-icon"></i><h3 class="text-white">C1</h3><span class="text-white">İleri</span>
+                    </div>
+                    <div class="gateway-card solid-card bg-c2 gateway-level" data-level="C2">
+                        <i class="fa-solid fa-user-graduate gw-icon"></i><h3 class="text-white">C2</h3><span class="text-white">Uzman</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="seviyeDashboard" class="screen">
+            <div class="menu-card glass-card">
+                <div class="dashboard-header">
+                    <div class="level-badge" id="seciliSeviyeBaslik">A1 Seviyesi</div>
+                    <button id="btnHocaDegistir" class="btn-small modern-btn-outline"><i class="fa-solid fa-robot"></i> Hoca Değiştir</button>
+                </div>
+                <div class="xp-container modern-xp-bar">
+                    <div class="xp-header"><span id="userLevelTxt">Level 1 Öğrenci</span><span id="userXpTxt">0 / 100 XP</span></div>
+                    <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBarFill"></div></div>
+                </div>
+                <div class="dashboard-options" style="grid-template-columns: 1fr 1fr; display: grid; gap: 15px;">
+                    <div class="gateway-card solid-card bg-notlar gateway-feature" data-action="konuAnlatimiAc">
+                        <i class="fa-solid fa-book-open fa-2x mb-10 text-white"></i><h4 class="text-white">Ders Notları</h4><p class="text-white" style="opacity:0.9;">Konuları Oku</p>
+                    </div>
+                    <div class="gateway-card solid-card bg-ogrenme gateway-feature" data-action="ogrenmeModunuAc">
+                        <i class="fa-solid fa-brain fa-2x mb-10 text-white"></i><h4 class="text-white">Öğrenme Modu</h4><p class="text-white" style="opacity:0.9;">Kelimeleri Ezberle</p>
+                    </div>
+                    <div class="gateway-card solid-card bg-ai gateway-feature" data-action="aiAsistaniAc">
+                        <i class="fa-solid fa-headset fa-2x mb-10 text-white"></i><h4 class="text-white">AI Asistan</h4><p class="text-white" style="opacity:0.9;">Sesli Pratik Yap</p>
+                    </div>
+                    <div class="gateway-card solid-card bg-tabu gateway-feature" data-action="oyunAyarlariniAc">
+                        <i class="fa-solid fa-gamepad fa-2x mb-10 text-white"></i><h4 class="text-white">Tabu Oyna</h4><p class="text-white" style="opacity:0.9;">Oyunla Bilgini Sına</p>
+                    </div>
+                    <div class="gateway-card solid-card bg-yazma gateway-feature" data-action="yazmaModunuAc" style="grid-column: span 2;">
+                        <i class="fa-solid fa-pen-nib fa-2x mb-10 text-white"></i><h4 class="text-white">Yazma Çalışması</h4><p class="text-white" style="opacity:0.9;">Metin Yaz ve AI'a Kontrol Ettir</p>
+                    </div>
+                </div>
+                <button id="btnChangeLevel" class="btn btn-secondary mt-20 w-100"><i class="fa-solid fa-arrow-left"></i> Seviye Değiştir</button>
+            </div>
+        </div>
+
+        <div id="sipYolHaritasiEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 950px; margin: 0 auto; text-align: left;">
+                <h2 class="card-title"><i class="fa-solid fa-network-wired"></i> AI Sınav & Öğrenme Haritası</h2>
+                <h4 class="section-label">Sınav Yol Haritaları</h4>
+                <div class="exam-map-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px;">
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="YKS">YKS</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="KPSS">KPSS</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="ALES">ALES</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="LGS">LGS</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="MSÜ">MSÜ</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="DGS">DGS</button>
+                    <button class="btn btn-secondary modern-shadow dynamic-map-btn" data-map="YDS">YDS / YÖKDİL</button>
+                </div>
+                <h4 class="section-label">Özel Konu Çalışması</h4>
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <input type="text" id="aiTopicInput" class="modern-input" style="margin-bottom:0;" placeholder="İstediğin bir konuyu yaz...">
+                    <button class="btn btn-primary modern-shadow pulse dynamic-map-btn" data-map="custom" style="white-space: nowrap;"><i class="fa-solid fa-wand-magic-sparkles"></i> Çıkar</button>
+                </div>
+                <div id="aiLoadingMap" style="display:none; text-align:center; padding: 20px; color: var(--primary);">
+                    <i class="fa-solid fa-spinner fa-spin fa-3x"></i><p style="margin-top:15px;">Yapay Zeka müfredatı analiz ediyor...</p>
+                </div>
+                <div class="mindmap-container" id="mindmapAlan" style="overflow-x:auto;"></div>
+                    <button class="btn btn-secondary w-100 mt-20 back-to-dashboard">Geri Dön</button>
+            </div>
+        </div>
+
+        <div id="sipCoreEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 900px; margin: 0 auto; text-align: left;">
+                <h2 class="card-title" style="color:var(--primary);"><i class="fa-solid fa-wand-magic-sparkles"></i> SIP Core AI</h2>
+                <p class="subtitle" style="margin-bottom:20px;">Sisteme hedeflerini söyle, sana özel bir "Öğrenme DNA'sı" çıkarsın.</p>
+                <div class="admin-tabs" style="margin-bottom: 20px;">
+                    <button class="btn btn-primary active-tab core-tab-btn" data-tab="dnaTab"><i class="fa-solid fa-dna"></i> 1. Öğrenme DNA'sı</button>
+                    <button class="btn btn-secondary core-tab-btn" data-tab="kampanyaTab"><i class="fa-solid fa-calendar-check"></i> 2. Çalışma Kampanyası</button>
+                    <button class="btn btn-secondary core-tab-btn" data-tab="materyalTab"><i class="fa-solid fa-file-pdf"></i> 3. Materyal Motoru</button>
+                </div>
+                <div id="dnaTab" class="core-tab-content">
+                    <h3 class="section-label">Öğrenme DNA'nı Çıkar</h3>
+                    <input type="text" id="dnaGirdi" class="modern-input" placeholder="Hedeflerini yaz.">
+                    <button class="btn btn-primary w-100 modern-shadow pulse core-action" data-action="coreDnaUret"><i class="fa-solid fa-microscope"></i> DNA Profili Çıkar</button>
+                    <div id="dnaYukleniyor" style="display:none; text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin fa-2x text-primary"></i></div>
+                    <div id="dnaSonucAlani" class="dna-result-box mt-20" style="display:none;"></div>
+                </div>
+                <div id="kampanyaTab" class="core-tab-content" style="display:none;">
+                    <h3 class="section-label">Özel Çalışma Kampanyası (Sprint)</h3>
+                    <input type="text" id="kampanyaGirdi" class="modern-input" placeholder="Hangi konuda kampanya istiyorsun?">
+                    <button class="btn btn-warning w-100 modern-shadow pulse core-action" data-action="coreKampanyaUret" style="color:black;"><i class="fa-solid fa-bolt"></i> 7 Günlük Kampanya Üret</button>
+                    <div id="kampanyaYukleniyor" style="display:none; text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin fa-2x text-warning"></i></div>
+                    <div id="kampanyaSonucAlani" class="campaign-timeline mt-20" style="display:none;"></div>
+                </div>
+                <div id="materyalTab" class="core-tab-content" style="display:none;">
+                    <h3 class="section-label">Akıllı Materyal Üretimi (Asset Gen)</h3>
+                    <input type="text" id="materyalGirdi" class="modern-input" placeholder="Hangi konunun materyali üretilsin?">
+                    <button class="btn btn-success w-100 modern-shadow pulse core-action" data-action="coreMateryalUret"><i class="fa-solid fa-print"></i> Özel Materyal Üret</button>
+                    <div id="materyalYukleniyor" style="display:none; text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin fa-2x text-success"></i></div>
+                    <div id="materyalSonucAlani" class="asset-card mt-20" style="display:none;"></div>
+                </div>
+                <button class="btn btn-secondary w-100 mt-20 back-to-dashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <div id="sipWorkspaceEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 850px; margin: 0 auto; text-align: left;">
+                <h2 class="card-title"><i class="fa-solid fa-book-journal-whills"></i> Çalışma Alanı (Workspace)</h2>
+                <div class="workspace-layout">
+                    <div class="workspace-main">
+                        <input type="text" placeholder="Not Başlığı..." class="workspace-title-input" id="wsTitle">
+                        <div class="workspace-editor" contenteditable="true" id="wsEditor" placeholder="Buraya notlarını yazabilirsin..."></div>
+                    </div>
+                    <div class="workspace-sidebar">
+                        <h4 style="margin-bottom:10px; border-bottom:2px solid #eee; padding-bottom:5px;">Yapılacaklar</h4>
+                        <div style="display:flex; gap:5px; margin-bottom:15px;">
+                            <input type="text" id="todoInput" class="modern-input" style="margin-bottom:0; padding:8px;" placeholder="Yeni görev...">
+                            <button id="todoAddBtn" class="btn btn-primary" style="padding:8px 12px;"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <ul id="todoList" class="todo-list"></ul>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button id="workspaceSaveBtn" class="btn btn-success flex-1 modern-shadow pulse"><i class="fa-solid fa-save"></i> Notları Kaydet</button>
+                    <button class="btn btn-secondary flex-1 back-to-dashboard">Geri Dön</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="sipSinavEkrani" class="screen">
+            <div class="settings-card glass-card premium-exam-card">
+                <h2 class="card-title">⏱️ Deneme Simülatörü</h2>
+                <div class="exam-status-strip">
+                    <span class="exam-status-pill"><i class="fa-solid fa-bolt"></i> Hızlı kurulum</span>
+                    <span class="exam-status-pill soft"><i class="fa-solid fa-layer-group"></i> Geçmiş soru havuzu</span>
+                    <span class="exam-status-pill soft"><i class="fa-solid fa-mobile-screen-button"></i> Mobil uyumlu</span>
+                </div>
+                <div id="sinavKurulum">
+                    <select id="sinavTuru" class="modern-input" style="height: 50px; font-size: 1rem;">
+                        <optgroup label="YKS (Üniversiteye Geçiş)"><option value="tyt" data-sure="165">TYT (165 Dakika)</option><option value="ayt" data-sure="180">AYT (180 Dakika)</option><option value="ydt" data-sure="120">YDT (Yabancı Dil - 120 Dakika)</option></optgroup>
+                        <optgroup label="Akademik & Memurluk"><option value="kpss" data-sure="130">KPSS Lisans (GY-GK - 130 Dakika)</option><option value="kpss_egitim" data-sure="100">KPSS Eğitim Bilimleri (100 Dakika)</option><option value="ales" data-sure="150">ALES (150 Dakika)</option><option value="dgs" data-sure="150">DGS (150 Dakika)</option><option value="yds" data-sure="180">YDS / YÖKDİL (180 Dakika)</option></optgroup>
+                        <optgroup label="Lise Geçiş & Askeri"><option value="lgs_sozel" data-sure="75">LGS Sözel (75 Dakika)</option><option value="lgs_sayisal" data-sure="80">LGS Sayısal (80 Dakika)</option><option value="msu" data-sure="165">MSÜ (165 Dakika)</option></optgroup>
+                    </select>
+                    <button id="sinavBaslatBtn" class="btn btn-primary w-100 modern-shadow mt-20 pulse">Sınavı Başlat</button>
+                </div>
+                <div id="sinavAktif" style="display:none; text-align:center;">
+                    <div class="modern-timer" style="width:200px; height:200px; margin: 20px auto; border-radius:50%; font-size: 3.5rem; border-width: 8px;">
+                        <span id="sinavKalanSure">165:00</span>
+                    </div>
+                    <p style="color:var(--danger); margin-top: 15px; font-weight: 700; font-size: 1.1rem;">Lütfen bu ekrandan ayrılmayın!</p>
+                    <button id="sinavBitirBtn" class="btn btn-danger w-100 mt-20 modern-shadow">Sınavı Bitir</button>
+                </div>
+                <div id="soruHavuzuPaneli" class="question-bank-panel">
+                    <div class="question-bank-head">
+                        <div>
+                            <div class="question-bank-kicker">Geçmiş Yıllar Havuzu</div>
+                            <h3>Çıkmış Soru Bankası</h3>
+                        </div>
+                        <span id="soruHavuzuIstatistik" class="question-bank-pill">0 soru</span>
+                    </div>
+                    <div class="question-bank-toolbar">
+                        <select id="soruHavuzuYilSelect" class="modern-input"></select>
+                        <select id="soruHavuzuKonuSelect" class="modern-input"></select>
+                    </div>
+                    <div class="question-bank-layout">
+                        <div class="question-list-shell">
+                            <div id="soruHavuzuListe" class="question-list"></div>
+                        </div>
+                        <div id="soruHavuzuDetay" class="question-detail-shell">
+                            <div class="empty-state">
+                                <i class="fa-solid fa-circle-question fa-3x"></i>
+                                <p>Yıl ve konu seçerek geçmiş soru havuzunu aç.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="sinavGeriBtn" class="btn btn-secondary w-100 mt-20 back-to-dashboard">Geri Dön</button>
+            </div>
+        </div>
+
+        <div id="hocaSecimEkrani" class="screen">
+            <div class="settings-card glass-card">
+                <h2 class="card-title">🎓 Yapay Zeka Hocanı Seç</h2>
+                <div class="mascot-grid">
+                    <div class="mascot-option" data-mascot="Bozkurt" data-mascot-icon="<i class='fa-solid fa-dog'></i>"><div class="m-icon"><i class="fa-solid fa-dog"></i></div><h3>Bozkurt</h3><p>Ciddi ve Motive Edici</p></div>
+                    <div class="mascot-option" data-mascot="Penguen" data-mascot-icon="<i class='fa-solid fa-snowman'></i>"><div class="m-icon"><i class="fa-solid fa-snowman"></i></div><h3>Penguen</h3><p>Sevimli ve Neşeli</p></div>
+                </div>
+                <button class="btn btn-secondary mt-20 w-100 go-to-screen" data-target="seviyeDashboard">İptal</button>
+            </div>
+        </div>
+
+        <div id="konuAnlatimiEkrani" class="screen">
+            <div class="settings-card glass-card" style="max-width: 850px; margin: 0 auto;">
+                <h2 class="card-title">📚 Ders Notları (<span id="dersNotuSeviyeBaslik">A1</span>)</h2>
+                <div class="lecture-layout">
+                    <div class="lecture-sidebar modern-sidebar">
+                        <div class="sidebar-title">Konular</div>
+                        <div id="dersNotlariListesi" class="lecture-list"></div>
+                    </div>
+                    <div class="lecture-content modern-content" id="dersNotuIcerik">
+                        <div class="empty-state"><p>Konu seç.</p></div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary mt-20 w-100 go-to-screen" data-target="seviyeDashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <div id="ogrenmeEkrani" class="screen">
+            <div class="settings-card glass-card">
+                <h2 class="card-title">Kelime Çalışma Masası</h2>
+                <div class="word-area">
+                    <div class="flip-card" id="flashcard">
+                        <div class="flip-card-inner modern-flip">
+                            <div class="flip-card-front">
+                                <button class="speak-btn modern-speak" data-speak-target="fcIngilizce"><i class="fa-solid fa-volume-high"></i></button>
+                                    <div class="main-word" id="fcIngilizce">WORD</div>
+                                    <div class="flip-hint flashcard-toggle"><i class="fa-solid fa-hand-pointer"></i> Çevir</div>
+                            </div>
+                            <div class="flip-card-back flashcard-toggle"><div class="word-meaning" id="fcTurkce">ANLAM</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-buttons mt-20">
+                    <button id="sonrakiFlashcardBtn" class="btn btn-primary w-100 modern-shadow pulse">Öğrendim (+10 XP) <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+                <button class="btn btn-secondary mt-20 w-100 go-to-screen" data-target="seviyeDashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <div id="yazmaEkrani" class="screen">
+            <div class="settings-card glass-card">
+                <h2 class="card-title">✍️ Yazma Çalışması</h2>
+                <div class="modern-topic-box" id="yazmaKonusu">Konu: Kendini anlat.</div>
+                <textarea id="yazmaAlani" rows="8" class="modern-textarea" placeholder="Yazmaya başla..."></textarea>
+                <div class="writing-controls">
+                    <span id="kelimeSayaci" class="word-counter">Kelime: 0</span>
+                    <button id="yazmaKontrolBtn" class="btn btn-success modern-shadow pulse"><i class="fa-solid fa-check-double"></i> Kontrol Et</button>
+                </div>
+                <div id="yazmaGeriBildirim" class="modern-feedback" style="display:none;"></div>
+                <button class="btn btn-secondary w-100 mt-20 go-to-screen" data-target="seviyeDashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <div id="aiEkrani" class="screen">
+            <div class="settings-card ai-card glass-card">
+                <div class="mascot-container" id="mascotContainer">
+                    <div id="aiHocaIcon" class="mascot-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h2 class="card-title">AI <span id="aiHocaIsim">Asistan</span></h2>
+                </div>
+                <div class="chat-interface modern-chat">
+                    <div id="aiTopicsContainer" class="topic-scroll-area"></div>
+                    <div class="chat-bubble" id="aiKonusmaBalonu">Cevap bekliyor...</div>
+                    <button class="btn btn-danger w-100 mic-btn modern-shadow pulse" id="micButton"><i class="fa-solid fa-microphone"></i> Sesli Sor</button>
+                </div>
+                <button class="btn btn-secondary mt-20 w-100 go-to-screen" data-target="seviyeDashboard">Dashboard'a Dön</button>
+            </div>
+        </div>
+
+        <div id="oyunAyarlari" class="screen">
+            <div class="settings-card glass-card">
+                <h2 class="card-title">⚙️ Oyun Kurulumu</h2>
+                <button id="oyunuBaslatBtn" class="btn btn-primary w-100 mt-20 modern-shadow pulse">🚀 OYUNU BAŞLAT</button>
+                <button class="btn btn-secondary mt-20 w-100 go-to-screen" data-target="seviyeDashboard">İptal</button>
+            </div>
+        </div>
+
+        <div id="oyunEkrani" class="screen">
+            <div class="game-layout" id="oyunEkraniAlan" style="position:relative;">
+                <div id="oyunMiniHoca" class="mini-hoca"><i class="fa-solid fa-robot"></i></div>
+                <div class="scoreboard modern-scoreboard">
+                    <div class="team-score" id="takim1SkorBox"><h3 id="takim1Isim">Mavi</h3><div class="score" id="takim1Puan">0</div></div>
+                    <div class="timer-circle modern-timer"><span id="kalanSure">60</span></div>
+                    <div class="team-score" id="takim2SkorBox"><h3 id="takim2Isim">Kırmızı</h3><div class="score" id="takim2Puan">0</div></div>
+                </div>
+                <div class="word-area">
+                    <div class="flip-card" id="kelimeKarti">
+                        <div class="flip-card-inner modern-flip">
+                            <div class="flip-card-front">
+                                <span class="card-level modern-level-badge" id="cardLevel">A1</span>
+                                <div class="main-word" id="anaKelime">WORD</div>
+                                <div class="tabu-words" id="tabuKelimeler"></div>
+                            </div>
+                            <div class="flip-card-back"><div class="word-meaning" id="kelimeAnlami">ANLAM</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button id="dogruTahminBtn" class="btn btn-success ctrl-btn modern-shadow"><i class="fa-solid fa-check"></i> DOĞRU</button>
+                    <button id="tabuKullandiBtn" class="btn btn-danger ctrl-btn modern-shadow"><i class="fa-solid fa-xmark"></i> TABU</button>
+                </div>
+                <button id="turBitirBtn" class="btn btn-secondary tur-bitir w-100 mt-20">⏹️ Turu Bitir</button>
+            </div>
+        </div>
+        
+        <div id="oyunSonu" class="screen">
+             <div class="result-card glass-card">
+                <h2 class="card-title">🏆 OYUN BİTTİ!</h2>
+                <button class="btn btn-primary w-100 mt-20 modern-shadow pulse go-to-screen" data-target="seviyeDashboard">Dashboard'a Dön</button>
+             </div>
+        </div>
+
+        <div id="adminPaneliEkrani" class="screen">
+            <div class="settings-card glass-card admin-panel">
+                <div class="teacher-hero">
+                    <div>
+                        <div class="teacher-kicker">Eğitmen Komuta Merkezi</div>
+                        <h2 class="card-title teacher-title" style="text-align:left; margin-bottom:10px;">Hoş geldin, <span id="teacherHeroName">Öğretmen</span></h2>
+                        <p class="subtitle" style="text-align:left; margin-bottom:0;">Sınıf oluştur, öğrenci ata, 30 günlük raporu aç ve tek ekrandan bildirim gönder.</p>
+                    </div>
+                    <div class="teacher-hero-actions">
+                        <button class="btn btn-primary modern-shadow go-to-screen" data-target="seviyeSecimEkrani"><i class="fa-solid fa-earth-americas"></i> English Hub</button>
+                        <button class="btn btn-secondary modern-shadow go-to-screen" data-target="sipDashboardEkrani"><i class="fa-solid fa-brain"></i> SIP Dashboard</button>
+                    </div>
+                </div>
+
+                <div class="teacher-metric-grid">
+                    <div class="teacher-metric-card"><span>Sınıf</span><strong id="teacherMetricSinif">0</strong></div>
+                    <div class="teacher-metric-card"><span>Öğrenci</span><strong id="teacherMetricOgrenci">0</strong></div>
+                    <div class="teacher-metric-card"><span>Mesaj</span><strong id="teacherMetricMesaj">0</strong></div>
+                    <div class="teacher-metric-card"><span>Bildirim</span><strong id="teacherMetricBildirim">0</strong></div>
+                </div>
+
+                <div class="admin-tabs" style="margin-bottom: 20px;">
+                    <button class="btn btn-primary active-tab admin-tab-btn" data-tab="ogrenciTakip"><i class="fa-solid fa-chart-line"></i> Rapor Merkezi</button>
+                    <button class="btn btn-secondary admin-tab-btn" data-tab="kelimeYonetim"><i class="fa-solid fa-school"></i> Sınıflar / English Hub</button>
+                    <button class="btn btn-secondary admin-tab-btn" data-tab="notYonetim"><i class="fa-solid fa-envelope-open-text"></i> Mesajlar</button>
+                    <button class="btn btn-secondary admin-tab-btn" data-tab="coreYonetim"><i class="fa-solid fa-wand-magic"></i> SIP Core</button>
+                </div>
+                
+                <div id="ogrenciTakip" class="admin-tab-content">
+                    <div class="teacher-layout">
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Son 30 Gün Özeti</h3>
+                            <div id="teacherReportList" class="teacher-report-list"></div>
+                        </div>
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Öğrenci / Sınıf Raporu Aç</h3>
+                            <input type="text" id="teacherReportQuery" class="modern-input" placeholder="E-posta veya sınıf kodu">
+                            <input type="number" id="teacherReportDays" class="modern-input" value="30" min="1" max="365" placeholder="Gün">
+                            <button id="teacherOpenReportBtn" class="btn btn-primary w-100 modern-shadow pulse"><i class="fa-solid fa-magnifying-glass-chart"></i> Raporu Aç</button>
+                            <div id="teacherReportOutput" class="teacher-report-output"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="kelimeYonetim" class="admin-tab-content" style="display:none;">
+                    <div class="teacher-layout">
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Yeni Sınıf Oluştur</h3>
+                            <input type="text" id="teacherClassName" class="modern-input" placeholder="Sınıf adı">
+                            <input type="text" id="teacherClassFocus" class="modern-input" placeholder="Odak alanı / ders">
+                            <textarea id="teacherClassNote" class="modern-textarea" rows="4" placeholder="Sınıf açıklaması"></textarea>
+                            <button id="teacherCreateClassBtn" class="btn btn-success w-100 modern-shadow pulse"><i class="fa-solid fa-circle-plus"></i> Sınıf Oluştur</button>
+                        </div>
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Öğrenciyi Sınıfa Ata</h3>
+                            <input type="email" id="teacherAssignEmail" class="modern-input" placeholder="Öğrenci e-postası">
+                            <input type="text" id="teacherAssignClassId" class="modern-input" placeholder="Sınıf kodu">
+                            <button id="teacherAssignStudentBtn" class="btn btn-primary w-100 modern-shadow"><i class="fa-solid fa-user-plus"></i> Sınıfa Ekle</button>
+                        </div>
+                        <div class="teacher-panel-card teacher-panel-wide">
+                            <h3 class="section-label">Sınıflar</h3>
+                            <div id="teacherClassList" class="teacher-class-list"></div>
+                        </div>
+
+                        <div class="teacher-panel-card teacher-panel-wide">
+                            <h3 class="section-label">English Hub İçerik Yönetimi</h3>
+                            <div class="teacher-layout english-hub-manager" style="gap:16px;">
+                                <div class="teacher-panel-card" style="margin:0;">
+                                    <h4 class="section-label" style="font-size:1rem;">Kelime Ekle / Sil</h4>
+                                    <select id="yeniKelimeSeviye" class="modern-input">
+                                        <option value="A1">A1</option>
+                                        <option value="A2">A2</option>
+                                        <option value="B1">B1</option>
+                                        <option value="B2">B2</option>
+                                        <option value="C1">C1</option>
+                                        <option value="C2">C2</option>
+                                    </select>
+                                    <input type="text" id="yeniAnaKelime" class="modern-input" placeholder="İngilizce kelime">
+                                    <input type="text" id="yeniTurkceAnlam" class="modern-input" placeholder="Türkçe anlam">
+                                    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+                                        <input type="text" id="tabu1" class="modern-input" placeholder="Tabu 1">
+                                        <input type="text" id="tabu2" class="modern-input" placeholder="Tabu 2">
+                                        <input type="text" id="tabu3" class="modern-input" placeholder="Tabu 3">
+                                        <input type="text" id="tabu4" class="modern-input" placeholder="Tabu 4">
+                                        <input type="text" id="tabu5" class="modern-input" placeholder="Tabu 5">
+                                    </div>
+                                    <button id="yeniKelimeKaydetBtn" class="btn btn-success w-100 modern-shadow pulse"><i class="fa-solid fa-plus"></i> Kelime Kaydet</button>
+                                    <div id="tumKelimelerListesi" class="teacher-message-list" style="margin-top:10px;"></div>
+                                </div>
+
+                                <div class="teacher-panel-card" style="margin:0;">
+                                    <h4 class="section-label" style="font-size:1rem;">Ders Notu Ekle / Sil</h4>
+                                    <select id="yeniNotSeviye" class="modern-input">
+                                        <option value="A1">A1</option>
+                                        <option value="A2">A2</option>
+                                        <option value="B1">B1</option>
+                                        <option value="B2">B2</option>
+                                        <option value="C1">C1</option>
+                                        <option value="C2">C2</option>
+                                    </select>
+                                    <input type="text" id="yeniNotKategori" class="modern-input" placeholder="Kategori örn: Grammar, Vocabulary, Skills">
+                                    <input type="text" id="yeniNotBaslik" class="modern-input" placeholder="Ders notu başlığı">
+                                    <textarea id="yeniNotIcerik" class="modern-textarea" rows="6" placeholder="Ders notu içeriği"></textarea>
+                                    <div style="display:flex; gap:8px;">
+                                        <button id="notKaydetBtn" class="btn btn-primary w-100 modern-shadow"><i class="fa-solid fa-floppy-disk"></i> Not Kaydet</button>
+                                        <button id="notIptalBtn" class="btn btn-secondary w-100 modern-shadow">Temizle</button>
+                                    </div>
+                                    <div id="tumNotlarListesi" class="teacher-message-list" style="margin-top:10px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="notYonetim" class="admin-tab-content" style="display:none;">
+                    <div class="teacher-layout">
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Bildirim Gönder</h3>
+                            <select id="teacherMessageTargetType" class="modern-input">
+                                <option value="email">Öğrenciye e-posta</option>
+                                <option value="class">Sınıfa toplu</option>
+                            </select>
+                            <input type="text" id="teacherMessageTarget" class="modern-input" placeholder="E-posta adresi veya sınıf kodu">
+                            <input type="text" id="teacherMessageSubject" class="modern-input" placeholder="Konu">
+                            <textarea id="teacherMessageBody" rows="5" class="modern-textarea" placeholder="Mesaj içeriği"></textarea>
+                            <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+                                <label for="teacherMessageFile" class="btn btn-secondary modern-shadow" style="white-space:nowrap;"><i class="fa-solid fa-paperclip"></i> Dosya Ekle</label>
+                                <input type="file" id="teacherMessageFile" accept="image/*,application/pdf" multiple capture="camera" style="display:none;" />
+                                <span id="teacherMessageFileName" style="font-size:12px; color:var(--text-muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Dosya seçilmedi</span>
+                                <button id="teacherSendMessageBtn" class="btn btn-warning modern-shadow" style="color:black;"><i class="fa-solid fa-paper-plane"></i> Gönder</button>
+                            </div>
+                            <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">Destek: JPG, PNG, PDF; kamera ile fotoğraf çekilebilir.</div>
+                        </div>
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Giden Bildirimler</h3>
+                            <div id="teacherMessageList" class="teacher-message-list"></div>
+                        </div>
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Gelen Yanıtlar</h3>
+                            <div id="teacherReplyList" class="teacher-message-list"></div>
+                        </div>
+                        <div class="teacher-panel-card" style="margin-top:12px;">
+                            <h3 class="section-label">Sohbet (Canlı / Sınıf)</h3>
+                            <div id="teacherChatArea" style="border:1px solid #e6e9ef; border-radius:10px; padding:10px; max-height:240px; overflow:auto; background:#fff;">Henüz mesaj yok</div>
+                            <div style="display:flex; gap:8px; margin-top:8px;">
+                                <input id="teacherChatTarget" class="modern-input" placeholder="Sınıf kodu veya e-posta" style="flex:1;">
+                                <input id="teacherChatText" class="modern-input" placeholder="Mesajınız..." style="flex:2;">
+                                <label for="teacherChatFile" class="btn btn-secondary" title="Dosya Ekle"><i class="fa-solid fa-paperclip"></i></label>
+                                <input type="file" id="teacherChatFile" accept="image/*,application/pdf" capture="camera" style="display:none;">
+                                <button id="teacherChatSendBtn" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                            <div id="teacherChatFileName" style="font-size:12px; color:var(--text-muted); margin-top:6px;">Dosya seçilmedi</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="coreYonetim" class="admin-tab-content" style="display:none;">
+                    <div class="teacher-layout">
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">SIP Core Ders Tasarım Asistanı</h3>
+                            <input type="text" id="coreOgretmenGirdi" class="modern-input" placeholder="Örn: 9. Sınıf Fotosentez Konusu">
+                            <button id="coreDersPlaniUretBtn" class="btn btn-primary w-100 modern-shadow"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Ders Planı Üret</button>
+                            <div id="coreOgretmenYukleniyor" style="display:none; text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin fa-2x text-primary"></i></div>
+                            <div id="coreOgretmenSonuc" class="modern-feedback mt-20" style="display:none;"></div>
+                        </div>
+                        <div class="teacher-panel-card">
+                            <h3 class="section-label">Hızlı Geçişler</h3>
+                            <button class="btn btn-secondary w-100 modern-shadow go-to-screen" data-target="seviyeSecimEkrani"><i class="fa-solid fa-earth-americas"></i> English Hub'a Dön</button>
+                            <button class="btn btn-secondary w-100 modern-shadow mt-10 go-to-screen" data-target="sipDashboardEkrani"><i class="fa-solid fa-brain"></i> SIP Dashboard'a Dön</button>
+                            <button class="btn btn-secondary w-100 modern-shadow mt-10 go-to-screen" data-target="anaKapiEkrani"><i class="fa-solid fa-door-open"></i> Ana Kapı</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger mt-20 w-100 modern-shadow go-to-screen" data-target="anaKapiEkrani">Çıkış Yap</button>
+            </div>
+        </div>
+
+        <div id="modalOverlay" class="modal-overlay" style="display:none;"></div>
+        <div id="haritaModal" class="mindmap-modal glass-card" style="display:none;">
+            <h3 id="modalTitle"></h3>
+            <p id="modalNote"></p>
+            <a id="modalLink" href="#" target="_blank" class="btn btn-danger w-100 modern-shadow">Video İzle</a>
+            <button id="haritaModalCloseBtn" class="btn btn-secondary w-100 mt-20">Kapat</button>
+        </div>
+
+        <nav class="mobile-quick-nav" aria-label="Mobil hızlı menü">
+            <button type="button" class="mobile-nav-toggle" title="Genişlet / Daralt">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <button type="button" class="mobile-quick-nav-item" data-target="sipDashboardEkrani">
+                <i class="fa-solid fa-brain"></i>
+                <span>Panel</span>
+            </button>
+            <button type="button" class="mobile-quick-nav-item" data-target="sipSinavEkrani">
+                <i class="fa-solid fa-file-circle-question"></i>
+                <span>Deneme</span>
+                <span class="mobile-nav-badge" data-mobile-badge="deneme">0</span>
+            </button>
+            <button type="button" class="mobile-quick-nav-item mobile-quick-nav-accent" data-action="pomodoroEkraniAc">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Odak</span>
+            </button>
+            <button type="button" class="mobile-quick-nav-item" data-action="sipGecmisAc">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Geçmiş</span>
+                <span class="mobile-nav-badge" data-mobile-badge="gecmis">0</span>
+            </button>
+            <button type="button" class="mobile-quick-nav-item" data-action="sipWorkspaceAc">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <span>Notlar</span>
+            </button>
+            <button type="button" class="mobile-quick-nav-item" data-target="anaKapiEkrani">
+                <i class="fa-solid fa-house"></i>
+                <span>Ana</span>
+            </button>
+        </nav>
+
+        <script>
+            function mobileQuickNavSetActive(screenId) {
+                const nav = document.querySelector('.mobile-quick-nav');
+                if (!nav) return;
+                // Nav children order: Panel, Deneme, Odak, Geçmiş, Notlar, Ana
+                const map = {
+                    sipDashboardEkrani: 0,
+                    sipSinavEkrani: 1,
+                    sipPomodoroEkrani: 2,
+                    sipGecmisEkrani: 3,
+                    sipWorkspaceEkrani: 4,
+                    anaKapiEkrani: 5
+                };
+                nav.querySelectorAll('.mobile-quick-nav-item').forEach(btn => btn.classList.remove('is-active'));
+                const index = map[screenId];
+                if (typeof index === 'number' && nav.children[index]) {
+                    nav.children[index].classList.add('is-active');
+                } else {
+                    // Try to find a button whose onclick contains the screenId or maps to a handler
+                    const fallback = Array.from(nav.querySelectorAll('.mobile-quick-nav-item')).find(btn => {
+                        const target = btn.getAttribute('data-target') || '';
+                        const action = btn.getAttribute('data-action') || '';
+                        return target === screenId || (screenId === 'sipPomodoroEkrani' && action === 'pomodoroEkraniAc');
+                    });
+                    if (fallback) fallback.classList.add('is-active');
+                }
+                mobileQuickNavRefreshBadges(screenId);
+            }
+
+            function mobileQuickNavRefreshBadges(screenId) {
+                const denemeBadge = document.querySelector('[data-mobile-badge="deneme"]');
+                const gecmisBadge = document.querySelector('[data-mobile-badge="gecmis"]');
+                if (denemeBadge) {
+                    let denemeCount = 0;
+                    if (screenId === 'sipSinavEkrani' && typeof sipSoruHavuzuFiltreliListe === 'function') {
+                        denemeCount = sipSoruHavuzuFiltreliListe().length;
+                    } else if (typeof SORU_HAVUZU === 'object' && SORU_HAVUZU) {
+                        denemeCount = Object.values(SORU_HAVUZU).reduce((total, sinav) => {
+                            return total + Object.values(sinav || {}).reduce((yearTotal, soruListesi) => yearTotal + (Array.isArray(soruListesi) ? soruListesi.length : 0), 0);
+                        }, 0);
+                    }
+                    denemeBadge.textContent = String(denemeCount);
+                    denemeBadge.style.display = denemeCount > 0 ? 'inline-flex' : 'none';
+                }
+                if (gecmisBadge) {
+                    const gecmisCount = Array.isArray(window.localOgrenci?.sipHistory) ? window.localOgrenci.sipHistory.length : 0;
+                    gecmisBadge.textContent = String(gecmisCount);
+                    gecmisBadge.style.display = gecmisCount > 0 ? 'inline-flex' : 'none';
+                }
+                // ensure workspace badge or quick state is updated if needed
+                const workspaceBtn = document.querySelector('.mobile-quick-nav-item[data-action="sipWorkspaceAc"]');
+                if (workspaceBtn) { /* no badge yet - leave as icon */ }
+            }
+        </script>
+
+
+    </main>
+
+    <footer class="site-footer bg-dark text-white-50 py-4 mt-auto" role="contentinfo">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <div class="col-md-6">
+                    <strong class="text-white">S.I.P. Core AI</strong>
+                    <p class="mb-0 small">English Hub ve SIP Dashboard ile öğrenme ekosistemi. Bootstrap 5, harici CSS ve JavaScript ile geliştirilmiştir.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a class="link-light link-underline-opacity-0 me-3" href="#" data-nav-target="anaKapiEkrani">Ana Kapı</a>
+                    <a class="link-light link-underline-opacity-0 me-3" href="#" data-nav-target="authEkrani">Giriş</a>
+                    <span class="small">© 2026 S.I.P. Core</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Öğrenci Sohbet Widget -->
+    <div id="studentChatWidget" style="position:fixed; right:18px; bottom:18px; width:340px; max-height:420px; background:linear-gradient(180deg,#fff,#f8fafc); border-radius:12px; box-shadow:0 8px 30px rgba(15,23,42,0.12); overflow:hidden; display:none; z-index:1200;">
+        <div style="background:#111827; color:white; padding:10px 12px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; gap:8px; align-items:center;"><i class="fa-solid fa-comments" style="font-size:1.2rem;color:#60a5fa;"></i><strong>Öğrenci Sohbeti</strong></div>
+            <button id="toggleStudentChatBtn" class="btn-small" style="background:transparent; color:white; border:none;"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="studentChatList" style="padding:10px; max-height:260px; overflow:auto; background:white;"></div>
+        <div id="studentChatComposer" style="padding:10px; background:#f9fafb;"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
