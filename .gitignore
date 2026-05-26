@@ -32,3 +32,6 @@ dist/
 
 oracleJdk-26/
 backend/oracleJdk-26/
+
+build_apk/
+*.apk

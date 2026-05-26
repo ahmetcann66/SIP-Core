@@ -1740,6 +1740,10 @@ window.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.core-tab-btn').forEach(btn => btn.addEventListener('click', ()=> {
             const t = btn.getAttribute('data-tab'); if (t) try { coreSekmeGoster(t); } catch(e){}
         }));
+        // Admin tab buttons (teacher panel)
+        document.querySelectorAll('#adminPaneliEkrani .admin-tab-btn').forEach(btn => btn.addEventListener('click', ()=> {
+            const t = btn.getAttribute('data-tab'); if (t) try { adminSekmeGoster(t); } catch(e){}
+        }));
         document.querySelectorAll('.core-action').forEach(btn => btn.addEventListener('click', ()=> {
             const a = btn.getAttribute('data-action'); if (a && typeof window[a] === 'function') window[a]();
         }));
@@ -1771,6 +1775,11 @@ window.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.go-to-screen').forEach(b => b.addEventListener('click', ()=> {
             const t = b.getAttribute('data-target'); if (t) ekranGoster(t, true);
         }));
+
+        // Teacher panel buttons
+        const tOpenReport = document.getElementById('teacherOpenReportBtn'); if (tOpenReport) tOpenReport.addEventListener('click', ()=> teacherHubOpenReport());
+        const tCreateClass = document.getElementById('teacherCreateClassBtn'); if (tCreateClass) tCreateClass.addEventListener('click', ()=> teacherHubCreateClass());
+        const tAssign = document.getElementById('teacherAssignStudentBtn'); if (tAssign) tAssign.addEventListener('click', ()=> teacherHubAssignStudentToClass());
 
         // Flashcard bindings
         const speakBtns = document.querySelectorAll('[data-speak-target]'); speakBtns.forEach(sb => sb.addEventListener('click', (e)=> {
@@ -3413,7 +3422,7 @@ function adminSekmeGoster(sekmeId) {
     });
     const butonlar = document.querySelectorAll('#adminPaneliEkrani .admin-tabs button');
     butonlar.forEach(btn => btn.classList.remove('active-tab'));
-    const seciliButon = Array.from(butonlar).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(sekmeId));
+    const seciliButon = Array.from(butonlar).find(btn => btn.getAttribute('data-tab') === sekmeId);
     if (seciliButon) seciliButon.classList.add('active-tab');
     if (sekmeId === 'kelimeYonetim') renderEnglishHubAdminPanel();
 }
