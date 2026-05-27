@@ -63,11 +63,17 @@ public class StudentController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Student student) {
         try {
-            if (studentRepository.existsByEmail(student.getEmail())) {
+            if (student.getEmail() == null) {
+                return ResponseEntity.badRequest().body("E-posta bos olamaz!");
+            }
+            String emailNorm = student.getEmail().trim().toLowerCase();
+            student.setEmail(emailNorm);
+
+            if (studentRepository.existsByEmail(emailNorm)) {
                 return ResponseEntity.badRequest().body("Bu e-posta adresi zaten kullaniliyor!");
             }
             // Öğretmen tablosunda da kontrol et
-            if (teacherRepository.findByEmail(student.getEmail()).isPresent()) {
+            if (teacherRepository.findByEmail(emailNorm).isPresent()) {
                 return ResponseEntity.badRequest().body("Bu e-posta adresi bir öğretmen tarafından zaten kullaniliyor!");
             }
             Student saved = studentRepository.save(student);
@@ -80,12 +86,17 @@ public class StudentController {
     // GIRIS
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Student student) {
-        try {
-            System.out.println("DEBUG StudentController.login payload -> email='" + student.getEmail() + "' sifre='" + student.getSifre() + "'");
-        } catch (Exception e) {
-            System.out.println("DEBUG StudentController.login: failed to read payload: " + e.getMessage());
+        if (student.getEmail() == null) {
+            return ResponseEntity.badRequest().body("E-posta bos olamaz!");
         }
-        Optional<Student> found = studentRepository.findByEmailAndSifre(student.getEmail(), student.getSifre());
+        String emailNorm = student.getEmail().trim().toLowerCase();
+        String sifre = student.getSifre();
+
+        try {
+            System.out.println("DEBUG StudentController.login payload -> email='" + emailNorm + "'");
+        } catch (Exception e) {}
+
+        Optional<Student> found = studentRepository.findByEmailAndSifre(emailNorm, sifre);
         if (found.isPresent()) {
             return ResponseEntity.ok(found.get());
         } else {
