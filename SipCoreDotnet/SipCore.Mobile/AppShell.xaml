@@ -19,4 +19,28 @@
         ContentTemplate="{DataTemplate view:AuthPage}"
         Route="AuthPage" />
 
+    <!-- Main Dashboard - accessible after login -->
+    <ShellContent
+        Title="Dashboard"
+        ContentTemplate="{DataTemplate view:DashboardPage}"
+        Route="DashboardPage" />
+
+    <!-- English Hub - Full Learning Module -->
+    <ShellContent
+        Title="English Hub"
+        ContentTemplate="{DataTemplate view:EnglishHubPage}"
+        Route="EnglishHubPage" />
+
+    <!-- SIP Core Panel -->
+    <ShellContent
+        Title="SIP Core"
+        ContentTemplate="{DataTemplate view:SipCorePage}"
+        Route="SipCorePage" />
+
+    <!-- Level Selection -->
+    <ShellContent
+        Title="Seviye Seçimi"
+        ContentTemplate="{DataTemplate view:LevelSelectPage}"
+        Route="LevelSelectPage" />
+
 </Shell>

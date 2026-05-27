@@ -39,52 +39,87 @@ public class ApiClient : IApiClient
         {
             var json = JsonSerializer.Serialize(request, JsonOptions);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            // legacy payload expected by /api/students endpoints uses 'sifre' instead of 'password'
             var emailNorm = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
+            
+            // Prepare legacy payload with 'sifre' field for backend compatibility
             var legacyPayload = JsonSerializer.Serialize(new { email = emailNorm, sifre = request.Password });
             var legacyContent = new StringContent(legacyPayload, System.Text.Encoding.UTF8, "application/json");
-            // Try the newer auth endpoint first, fall back to legacy student login if not present
-            HttpResponseMessage response = null;
+            
+            LogMessage($"LoginAsync: email='{emailNorm}', password length={request.Password?.Length ?? 0}");
+            LogMessage($"LoginAsync: Legacy payload = {legacyPayload}");
+            
+            // Try legacy student login endpoint first (most common for this backend)
+            HttpResponseMessage? response = null;
             try {
-                LogMessage($"LoginAsync: POST api/auth/login -> PayloadLength={json.Length}");
+                LogMessage($"LoginAsync: POST api/students/login");
+                response = await _httpClient.PostAsync("api/students/login", legacyContent);
+                LogMessage($"LoginAsync: api/students/login returned {response.StatusCode}");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var resp = await response.Content.ReadAsStringAsync();
+                    LogMessage($"LoginAsync: Response content = {resp}");
+                    
+                    // Try to parse as AuthResponse first
+                    var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
+                    if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
+                    {
+                        SetAuthorizationToken(auth.Token);
+                        return auth;
+                    }
+                    
+                    // Backend returned a Student object - extract id and create synthetic token
+                    try {
+                        using var doc = JsonDocument.Parse(resp);
+                        if (doc.RootElement.TryGetProperty("id", out var idProp))
+                        {
+                            var idStr = idProp.GetRawText();
+                            var syntheticToken = $"student:{idStr}:{emailNorm}";
+                            SetAuthorizationToken(syntheticToken);
+                            LogMessage($"LoginAsync: Synthesized token for student id {idStr}");
+                            return new AuthResponse(syntheticToken, 0, null);
+                        }
+                    } catch { /* ignore parse errors */ }
+                    
+                    // If response is success but couldn't parse, still consider it successful
+                    // This handles cases where backend returns just confirmation message
+                    if (!string.IsNullOrWhiteSpace(resp) && !resp.Contains("error", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var syntheticToken = $"student:0:{emailNorm}";
+                        SetAuthorizationToken(syntheticToken);
+                        LogMessage($"LoginAsync: Login successful but no id in response, using fallback token");
+                        return new AuthResponse(syntheticToken, 0, null);
+                    }
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    LogMessage($"LoginAsync: api/students/login error = {errorContent}");
+                }
+            } catch (Exception ex) {
+                LogMessage($"LoginAsync: api/students/login exception = {ex.Message}");
+            }
+
+            // Try newer auth endpoint as fallback
+            try {
+                LogMessage($"LoginAsync: POST api/auth/login");
                 response = await _httpClient.PostAsync("api/auth/login", content);
                 LogMessage($"LoginAsync: api/auth/login returned {response.StatusCode}");
-            } catch { /* ignore and try fallback */ }
-
-            if (response == null || !response.IsSuccessStatusCode)
-            {
-                try {
-                    LogMessage($"LoginAsync: Falling back to api/students/login -> LegacyPayloadLength={legacyPayload.Length}");
-                    response = await _httpClient.PostAsync("api/students/login", legacyContent);
-                    LogMessage($"LoginAsync: api/students/login returned {response.StatusCode}");
-                } catch { return null; }
-            }
-
-            if (response == null || !response.IsSuccessStatusCode) return null;
-
-            var resp = await response.Content.ReadAsStringAsync();
-            LogMessage($"LoginAsync: Response content length={resp?.Length}");
-            // First try to parse as AuthResponse (token-based)
-            var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
-            if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
-            {
-                SetAuthorizationToken(auth.Token);
-                return auth;
-            }
-
-            // Fallback: backend returned a Student-like object. Extract id and synthesize a token.
-            try {
-                using var doc = JsonDocument.Parse(resp);
-                if (doc.RootElement.TryGetProperty("id", out var idProp))
+                
+                if (response.IsSuccessStatusCode)
                 {
-                    var idStr = idProp.GetRawText();
-                    // create a lightweight synthesized token so mobile can treat user as authenticated
-                    var syntheticToken = $"student:{idStr}";
-                    SetAuthorizationToken(syntheticToken);
-                    LogMessage($"LoginAsync: Synthesized token for student id {idStr}");
-                    return new AuthResponse(syntheticToken, 0, null);
+                    var resp = await response.Content.ReadAsStringAsync();
+                    LogMessage($"LoginAsync: api/auth/login Response = {resp}");
+                    var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
+                    if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
+                    {
+                        SetAuthorizationToken(auth.Token);
+                        return auth;
+                    }
                 }
-            } catch { /* ignore parse errors */ }
+            } catch (Exception ex) {
+                LogMessage($"LoginAsync: api/auth/login exception = {ex.Message}");
+            }
 
             return null;
         }
@@ -99,51 +134,88 @@ public class ApiClient : IApiClient
     {
         try
         {
+            var emailNorm = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
+            
+            // Prepare legacy payload with 'sifre' field for backend compatibility
+            var legacyPayload = JsonSerializer.Serialize(new { email = emailNorm, sifre = request.Password });
+            var legacyContent = new StringContent(legacyPayload, System.Text.Encoding.UTF8, "application/json");
+            
+            LogMessage($"RegisterAsync: email='{emailNorm}', password length={request.Password?.Length ?? 0}");
+            LogMessage($"RegisterAsync: Legacy payload = {legacyPayload}");
+            
+            // Try legacy student register endpoint first
+            HttpResponseMessage? response = null;
+            try {
+                LogMessage($"RegisterAsync: POST api/students/register");
+                response = await _httpClient.PostAsync("api/students/register", legacyContent);
+                LogMessage($"RegisterAsync: api/students/register returned {response.StatusCode}");
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var resp = await response.Content.ReadAsStringAsync();
+                    LogMessage($"RegisterAsync: Response content = {resp}");
+                    
+                    // Try to parse as AuthResponse first
+                    var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
+                    if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
+                    {
+                        SetAuthorizationToken(auth.Token);
+                        return auth;
+                    }
+                    
+                    // Backend returned a Student object - extract id and create synthetic token
+                    try {
+                        using var doc = JsonDocument.Parse(resp);
+                        if (doc.RootElement.TryGetProperty("id", out var idProp))
+                        {
+                            var idStr = idProp.GetRawText();
+                            var syntheticToken = $"student:{idStr}:{emailNorm}";
+                            SetAuthorizationToken(syntheticToken);
+                            LogMessage($"RegisterAsync: Synthesized token for student id {idStr}");
+                            return new AuthResponse(syntheticToken, 0, null);
+                        }
+                    } catch { /* ignore parse errors */ }
+                    
+                    // If response is success but couldn't parse, still consider it successful
+                    if (!string.IsNullOrWhiteSpace(resp) && !resp.Contains("error", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var syntheticToken = $"student:0:{emailNorm}";
+                        SetAuthorizationToken(syntheticToken);
+                        LogMessage($"RegisterAsync: Registration successful but no id in response, using fallback token");
+                        return new AuthResponse(syntheticToken, 0, null);
+                    }
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    LogMessage($"RegisterAsync: api/students/register error = {errorContent}");
+                }
+            } catch (Exception ex) {
+                LogMessage($"RegisterAsync: api/students/register exception = {ex.Message}");
+            }
+
+            // Try newer auth endpoint as fallback
             var json = JsonSerializer.Serialize(request, JsonOptions);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = null;
             try {
-                LogMessage($"RegisterAsync: POST api/auth/register -> PayloadLength={json.Length}");
+                LogMessage($"RegisterAsync: POST api/auth/register");
                 response = await _httpClient.PostAsync("api/auth/register", content);
                 LogMessage($"RegisterAsync: api/auth/register returned {response.StatusCode}");
-            } catch { /* ignore and try fallback */ }
-
-            if (response == null || !response.IsSuccessStatusCode)
-            {
-                try {
-                    // legacy payload for students.register expects 'sifre'
-                    var emailNorm = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
-                    var legacyPayload = JsonSerializer.Serialize(new { email = emailNorm, sifre = request.Password });
-                    var legacyContent = new StringContent(legacyPayload, System.Text.Encoding.UTF8, "application/json");
-                    LogMessage($"RegisterAsync: Falling back to api/students/register -> LegacyPayloadLength={legacyPayload.Length}");
-                    response = await _httpClient.PostAsync("api/students/register", legacyContent);
-                    LogMessage($"RegisterAsync: api/students/register returned {response.StatusCode}");
-                } catch { return null; }
-            }
-
-            if (response == null || !response.IsSuccessStatusCode) return null;
-
-            var resp = await response.Content.ReadAsStringAsync();
-            LogMessage($"RegisterAsync: Response content length={resp?.Length}");
-            var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
-            if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
-            {
-                SetAuthorizationToken(auth.Token);
-                return auth;
-            }
-
-            // If server returned a Student object, synthesize token
-            try {
-                using var doc = JsonDocument.Parse(resp);
-                if (doc.RootElement.TryGetProperty("id", out var idProp))
+                
+                if (response.IsSuccessStatusCode)
                 {
-                    var idStr = idProp.GetRawText();
-                    var syntheticToken = $"student:{idStr}";
-                    SetAuthorizationToken(syntheticToken);
-                    LogMessage($"RegisterAsync: Synthesized token for student id {idStr}");
-                    return new AuthResponse(syntheticToken, 0, null);
+                    var resp = await response.Content.ReadAsStringAsync();
+                    LogMessage($"RegisterAsync: api/auth/register Response = {resp}");
+                    var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
+                    if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
+                    {
+                        SetAuthorizationToken(auth.Token);
+                        return auth;
+                    }
                 }
-            } catch { }
+            } catch (Exception ex) {
+                LogMessage($"RegisterAsync: api/auth/register exception = {ex.Message}");
+            }
 
             return null;
         }

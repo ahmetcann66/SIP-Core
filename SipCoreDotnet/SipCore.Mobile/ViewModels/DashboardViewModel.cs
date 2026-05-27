@@ -136,7 +136,7 @@ public class DashboardViewModel : INotifyPropertyChanged
                 return;
             }
 
-            await Shell.Current.GoToAsync("MainPage");
+            await Shell.Current.GoToAsync("EnglishHubPage");
         }
         catch (Exception ex)
         {

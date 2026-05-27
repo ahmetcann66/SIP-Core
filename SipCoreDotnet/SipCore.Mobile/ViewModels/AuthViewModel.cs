@@ -76,15 +76,29 @@ public class AuthViewModel : INotifyPropertyChanged
                 return;
             }
 
+            // Save email for future reference
+            TokenService.SaveEmail(normalizedEmail);
+            
             StatusMessage = "Giriş başarılı";
+            System.Diagnostics.Debug.WriteLine($"Login successful for {normalizedEmail}");
+            
             // Navigate to Dashboard as the new root to avoid leaving AuthPage on the stack
             try
             {
                 await Shell.Current.GoToAsync("//DashboardPage");
             }
-            catch
+            catch (Exception navEx)
             {
-                await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+                System.Diagnostics.Debug.WriteLine($"Shell navigation failed: {navEx.Message}");
+                try
+                {
+                    await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+                }
+                catch (Exception pushEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"PushAsync also failed: {pushEx.Message}");
+                    StatusMessage = $"Giriş başarılı ama gezinme hatası";
+                }
             }
         }
         catch (Exception ex)
@@ -114,15 +128,29 @@ public class AuthViewModel : INotifyPropertyChanged
                 return;
             }
 
+            // Save email for future reference
+            TokenService.SaveEmail(normalizedEmail);
+            
             StatusMessage = "Kayıt başarılı";
+            System.Diagnostics.Debug.WriteLine($"Registration successful for {normalizedEmail}");
+            
             // After registration, navigate to Dashboard as root
             try
             {
                 await Shell.Current.GoToAsync("//DashboardPage");
             }
-            catch
+            catch (Exception navEx)
             {
-                await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+                System.Diagnostics.Debug.WriteLine($"Shell navigation failed: {navEx.Message}");
+                try
+                {
+                    await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+                }
+                catch (Exception pushEx)
+                {
+                    System.Diagnostics.Debug.WriteLine($"PushAsync also failed: {pushEx.Message}");
+                    StatusMessage = $"Kayıt başarılı ama gezinme hatası";
+                }
             }
         }
         catch (Exception ex)

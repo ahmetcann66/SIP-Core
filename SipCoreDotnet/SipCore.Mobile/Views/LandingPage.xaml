@@ -13,77 +13,101 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="22,42,22,20">
-        <VerticalStackLayout Grid.Row="0" Spacing="10" HorizontalOptions="Center">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header Section -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="22,38,22,12">
             <Label Text="🎓" FontSize="54" HorizontalTextAlignment="Center" />
             <Label Text="S.I.P. Core" FontSize="36" FontAttributes="Bold" TextColor="#F8FAFC" HorizontalTextAlignment="Center" />
             <Label Text="Eğitim Ekosistemi" FontSize="20" FontAttributes="Bold" TextColor="#22D3EE" HorizontalTextAlignment="Center" />
             <Label Text="Öğrenme DNA'nı analiz eden mobil asistan" FontSize="13" TextColor="#BFDBFE" HorizontalTextAlignment="Center" />
         </VerticalStackLayout>
 
-        <ScrollView Grid.Row="1" Margin="0,18,0,12">
-            <VerticalStackLayout Spacing="14">
+        <!-- Module Cards -->
+        <ScrollView Grid.Row="1" Margin="0,12,0,12">
+            <VerticalStackLayout Spacing="14" Padding="20,0,20,0">
+                
+                <!-- English Hub Card -->
                 <Frame Padding="18" CornerRadius="20" BorderColor="#38BDF8" BackgroundColor="#0F3A63" HasShadow="True">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                        <Label Grid.Column="0" Text="📚" FontSize="26" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="English Hub" FontSize="16" FontAttributes="Bold" TextColor="White" />
-                            <Label Text="107+ kelime, forbidden listesi, seviye tabanlı içerik" FontSize="12" TextColor="#BFDBFE" />
-                        </VerticalStackLayout>
-                    </Grid>
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="🌍" FontSize="28" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="English Hub" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Text="Kelime, Tabu, Flascard, Forbidden List" FontSize="12" TextColor="#BFDBFE" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Label Text="• A1-C2 seviyelerinde 107+ kelime&#x0a;• Tabu (Forbidden Words) oyunu&#x0a;• Flashcard ve kelime kartları&#x0a;• İlerleme takibi" FontSize="11" TextColor="#93C5FD" LineBreakMode="WordWrap" />
+                        <Button Text="🌍 English Hub Başla" Clicked="OnEnglishHubClicked" BackgroundColor="#0EA5E9" TextColor="White" CornerRadius="12" FontAttributes="Bold" FontSize="14" Padding="14,10" />
+                    </VerticalStackLayout>
                 </Frame>
 
+                <!-- SIP Dashboard Card -->
                 <Frame Padding="18" CornerRadius="20" BorderColor="#A78BFA" BackgroundColor="#3B1C74" HasShadow="True">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                        <Label Grid.Column="0" Text="⏱" FontSize="26" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="Pomodoro Masası" FontSize="16" FontAttributes="Bold" TextColor="White" />
-                            <Label Text="Başlat, duraklat, tur kaydı, geçmiş ve oturum özeti" FontSize="12" TextColor="#E9D5FF" />
-                        </VerticalStackLayout>
-                    </Grid>
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="🚀" FontSize="28" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="SIP Dashboard" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Text="Deneme, Skor, Pomodoro, Geçmiş, Notlar" FontSize="12" TextColor="#E9D5FF" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Label Text="• Sınav denemeleri ve soru bankası&#x0a;• XP ve seviye sistemi&#x0a;• Pomodoro masa çalışması&#x0a;• Kişisel notlar ve çalışma alanı" FontSize="11" TextColor="#DDD6FE" LineBreakMode="WordWrap" />
+                        <Button Text="🚀 SIP Dashboard Aç" Clicked="OnSipPanelClicked" BackgroundColor="#7C3AED" TextColor="White" CornerRadius="12" FontAttributes="Bold" FontSize="14" Padding="14,10" />
+                    </VerticalStackLayout>
                 </Frame>
 
+                <!-- Pomodoro Card -->
                 <Frame Padding="18" CornerRadius="20" BorderColor="#2DD4BF" BackgroundColor="#054B45" HasShadow="True">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                        <Label Grid.Column="0" Text="🧠" FontSize="26" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                            <Label Text="SIP Dashboard" FontSize="16" FontAttributes="Bold" TextColor="White" />
-                            <Label Text="Deneme, skor, roadmap, history ve workspace modülleri" FontSize="12" TextColor="#A7F3D0" />
-                        </VerticalStackLayout>
-                    </Grid>
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="⏱" FontSize="28" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="Pomodoro Masası" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Text="Odaklanmış çalışma tekniği" FontSize="12" TextColor="#A7F3D0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Label Text="• 25 dk yoğun çalışma + 5 dk mola&#x0a;• Tur kaydı ve oturum özeti&#x0a;• Çalışma geçmişi&#x0a;• Sesli hatırlatmalar" FontSize="11" TextColor="#6EE7B7" LineBreakMode="WordWrap" />
+                        <Button Text="⏱ Pomodoro Başlat" Clicked="OnPomodoroClicked" BackgroundColor="#059669" TextColor="White" CornerRadius="12" FontAttributes="Bold" FontSize="14" Padding="14,10" />
+                    </VerticalStackLayout>
                 </Frame>
+
+                <!-- AI Roadmap Card -->
+                <Frame Padding="18" CornerRadius="20" BorderColor="#FDE047" BackgroundColor="#713F12" HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="🗺" FontSize="28" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="AI Yol Haritası" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Text="Kişiselleştirilmiş öğrenme planı" FontSize="12" TextColor="#FEF08A" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Label Text="• AI destekli konu analizi&#x0a;• Kişiye özel öğrenme yolu&#x0a;• Video bağlantıları ve kaynaklar&#x0a;• İlerleme takibi" FontSize="11" TextColor="#FDE68A" LineBreakMode="WordWrap" />
+                        <Button Text="🗺 AI Yol Haritası Oluştur" Clicked="OnRoadMapClicked" BackgroundColor="#CA8A04" TextColor="White" CornerRadius="12" FontAttributes="Bold" FontSize="14" Padding="14,10" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- SIP Core AI Card -->
+                <Frame Padding="18" CornerRadius="20" BorderColor="#F472B6" BackgroundColor="#831843" HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Grid.Column="0" Text="🧠" FontSize="28" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="SIP Core AI" FontSize="18" FontAttributes="Bold" TextColor="White" />
+                                <Label Text="Öğrenme DNA analizi ve AI rehber" FontSize="12" TextColor="#FBCFE8" />
+                            </VerticalStackLayout>
+                        </Grid>
+                        <Label Text="• Öğrenme DNA analizi&#x0a;• AI destekli materyal üretimi&#x0a;• Kampanya ve hedef oluşturma&#x0a;• Performans raporları" FontSize="11" TextColor="#F9A8D4" LineBreakMode="WordWrap" />
+                        <Button Text="🧠 SIP Core AI" Clicked="OnSipCoreClicked" BackgroundColor="#BE185D" TextColor="White" CornerRadius="12" FontAttributes="Bold" FontSize="14" Padding="14,10" />
+                    </VerticalStackLayout>
+                </Frame>
+
             </VerticalStackLayout>
         </ScrollView>
 
-        <VerticalStackLayout Grid.Row="2" Spacing="10">
-            <HorizontalStackLayout Spacing="12">
-                <Button x:Name="EnglishHubButton"
-                        Text="🌐 English Hub"
-                        Clicked="OnEnglishHubClicked"
-                        BackgroundColor="#0EA5E9"
-                        TextColor="White"
-                        CornerRadius="14"
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        Padding="14,12"
-                        HorizontalOptions="FillAndExpand" />
-
-                <Button x:Name="SipPanelButton"
-                        Text="🚀 SIP Panel"
-                        Clicked="OnSipPanelClicked"
-                        BackgroundColor="#7C3AED"
-                        TextColor="White"
-                        CornerRadius="14"
-                        FontAttributes="Bold"
-                        FontSize="15"
-                        Padding="14,12"
-                        HorizontalOptions="FillAndExpand" />
-            </HorizontalStackLayout>
-
-            <Label Text="© 2026 S.I.P. Core"
-                   FontSize="10"
-                   TextColor="#94A3B8"
-                   HorizontalTextAlignment="Center" />
+        <!-- Bottom Action Buttons -->
+        <VerticalStackLayout Grid.Row="2" Padding="20,8,20,20" Spacing="10">
+            <Button Text="🔐 Giriş Yap veya Kayıt Ol" Clicked="OnLoginClicked" BackgroundColor="#4F46E5" TextColor="White" CornerRadius="14" FontAttributes="Bold" FontSize="15" Padding="16,14" />
+            <Label Text="© 2026 S.I.P. Core - Tüm hakları saklıdır" FontSize="10" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

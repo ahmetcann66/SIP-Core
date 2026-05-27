@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.EnglishHubPage"
+             Shell.NavBarIsVisible="False"
+             Title="English Hub"
+             BackgroundColor="#0F172A">
+    
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="18,16,18,12" Spacing="8">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="🌍" FontSize="32" VerticalOptions="Center" />
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Label Text="English Hub" FontSize="24" FontAttributes="Bold" TextColor="#F8FAFC" />
+                    <Label Text="{Binding CurrentLevel, StringFormat='Seviye: {0}'}" FontSize="14" TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+            
+            <!-- XP Progress Bar -->
+            <Frame Padding="12,8" CornerRadius="10" BackgroundColor="#1E293B" BorderColor="#6366F1" HasShadow="False">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="XP İlerleme" FontSize="11" TextColor="#94A3B8" />
+                        <ProgressBar Progress="{Binding XpProgress}" HeightRequest="8" ProgressColor="#6366F1" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="1" Text="{Binding XpText, StringFormat='{}{0} XP'}" FontSize="14" FontAttributes="Bold" TextColor="#F8FAFC" VerticalOptions="Center" Margin="10,0,0,0" />
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+
+        <!-- Tab Content -->
+        <ScrollView Grid.Row="1" Margin="0,0,0,20">
+            <VerticalStackLayout Padding="16,6,16,16" Spacing="16">
+
+                <!-- Module Selection Grid -->
+                <Label Text="📚 Modül Seç" FontSize="16" FontAttributes="Bold" TextColor="#F8FAFC" />
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <!-- Ders Notları -->
+                    <Frame Grid.Row="0" Grid.Column="0" Padding="14" CornerRadius="16" BackgroundColor="#0369A1" BorderColor="#38BDF8" HasShadow="True">
+                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                            <Label Text="📖" FontSize="32" HorizontalTextAlignment="Center" />
+                            <Label Text="Ders Notları" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
+                            <Label Text="Konuları Oku" FontSize="11" TextColor="#BAE6FD" HorizontalTextAlignment="Center" />
+                            <Button Text="Aç" Command="{Binding OpenNotesCommand}" BackgroundColor="#0EA5E9" TextColor="White" CornerRadius="8" FontSize="12" Padding="8,6" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Öğrenme Modu -->
+                    <Frame Grid.Row="0" Grid.Column="1" Padding="14" CornerRadius="16" BackgroundColor="#047857" BorderColor="#34D399" HasShadow="True">
+                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                            <Label Text="🧠" FontSize="32" HorizontalTextAlignment="Center" />
+                            <Label Text="Öğrenme Modu" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
+                            <Label Text="Kelimeleri Ezberle" FontSize="11" TextColor="#A7F3D0" HorizontalTextAlignment="Center" />
+                            <Button Text="Başla" Command="{Binding OpenLearningCommand}" BackgroundColor="#059669" TextColor="White" CornerRadius="8" FontSize="12" Padding="8,6" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Tabu Oyna -->
+                    <Frame Grid.Row="1" Grid.Column="0" Padding="14" CornerRadius="16" BackgroundColor="#BE123C" BorderColor="#FB7185" HasShadow="True">
+                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                            <Label Text="🎮" FontSize="32" HorizontalTextAlignment="Center" />
+                            <Label Text="Tabu Oyna" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
+                            <Label Text="Oyunla Bilgini Sına" FontSize="11" TextColor="#FECDD3" HorizontalTextAlignment="Center" />
+                            <Button Text="Oyna" Command="{Binding OpenTabuCommand}" BackgroundColor="#E11D48" TextColor="White" CornerRadius="8" FontSize="12" Padding="8,6" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- AI Asistan -->
+                    <Frame Grid.Row="1" Grid.Column="1" Padding="14" CornerRadius="16" BackgroundColor="#7C3AED" BorderColor="#A78BFA" HasShadow="True">
+                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                            <Label Text="🤖" FontSize="32" HorizontalTextAlignment="Center" />
+                            <Label Text="AI Asistan" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
+                            <Label Text="Sesli Pratik Yap" FontSize="11" TextColor="#DDD6FE" HorizontalTextAlignment="Center" />
+                            <Button Text="Başla" Command="{Binding OpenAiCommand}" BackgroundColor="#8B5CF6" TextColor="White" CornerRadius="8" FontSize="12" Padding="8,6" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Yazma Çalışması -->
+                    <Frame Grid.Row="2" Grid.ColumnSpan="2" Padding="14" CornerRadius="16" BackgroundColor="#B45309" BorderColor="#FCD34D" HasShadow="True">
+                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                            <Label Text="✍️" FontSize="32" HorizontalTextAlignment="Center" />
+                            <Label Text="Yazma Çalışması" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
+                            <Label Text="Metin Yaz ve AI'a Kontrol Ettir" FontSize="11" TextColor="#FEF3C7" HorizontalTextAlignment="Center" />
+                            <Button Text="Başla" Command="{Binding OpenWritingCommand}" BackgroundColor="#D97706" TextColor="White" CornerRadius="8" FontSize="12" Padding="8,6" HorizontalOptions="FillAndExpand" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Word Count Info -->
+                <Frame Padding="14" CornerRadius="14" BackgroundColor="#1E293B" BorderColor="#475569" HasShadow="False">
+                    <Grid ColumnDefinitions="*,*,*">
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="{Binding WordCount}" FontSize="24" FontAttributes="Bold" TextColor="#38BDF8" HorizontalTextAlignment="Center" />
+                            <Label Text="Kelime" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="{Binding LearnedCount}" FontSize="24" FontAttributes="Bold" TextColor="#34D399" HorizontalTextAlignment="Center" />
+                            <Label Text="Öğrenilen" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Label Text="{Binding TabuCount}" FontSize="24" FontAttributes="Bold" TextColor="#F87171" HorizontalTextAlignment="Center" />
+                            <Label Text="Tabu" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- Level Selection Button -->
+                <Button Text="🔄 Seviye Değiştir" Command="{Binding ChangeLevelCommand}" BackgroundColor="#334155" TextColor="White" CornerRadius="12" FontSize="14" Padding="14,12" />
+
+                <!-- Back Button -->
+                <Button Text="← Dashboard'a Dön" Command="{Binding GoDashboardCommand}" BackgroundColor="#374151" TextColor="White" CornerRadius="12" FontSize="14" Padding="14,12" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
