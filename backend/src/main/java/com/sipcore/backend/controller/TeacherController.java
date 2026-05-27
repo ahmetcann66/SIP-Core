@@ -33,12 +33,16 @@ public class TeacherController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerTeacher(@RequestBody Teacher teacher) {
-        Optional<Teacher> existingTeacher = teacherRepository.findByEmail(teacher.getEmail());
+        if (teacher.getEmail() == null) return ResponseEntity.badRequest().body("E-posta gerekli");
+        String emailNorm = teacher.getEmail().trim().toLowerCase();
+        teacher.setEmail(emailNorm);
+
+        Optional<Teacher> existingTeacher = teacherRepository.findByEmail(emailNorm);
         if (existingTeacher.isPresent()) {
             return ResponseEntity.badRequest().body("Bu e-posta adresi zaten kullaniliyor!");
         }
 
-        Optional<?> existingStudent = studentRepository.findByEmail(teacher.getEmail());
+        Optional<?> existingStudent = studentRepository.findByEmail(emailNorm);
         if (existingStudent.isPresent()) {
             return ResponseEntity.badRequest().body("Bu e-posta adresi bir ogrenci tarafindan zaten kullaniliyor!");
         }
@@ -49,16 +53,21 @@ public class TeacherController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginTeacher(@RequestBody Teacher loginRequest) {
-        Optional<Teacher> teacherOpt = teacherRepository.findByEmail(loginRequest.getEmail());
+        if (loginRequest.getEmail() == null) return ResponseEntity.badRequest().body("E-posta gerekli");
+        String emailNorm = loginRequest.getEmail().trim().toLowerCase();
+
+        Optional<Teacher> teacherOpt = teacherRepository.findByEmail(emailNorm);
 
         if (teacherOpt.isPresent()) {
             Teacher teacher = teacherOpt.get();
-            if (teacher.getSifre().equals(loginRequest.getSifre())) {
+            if (teacher.getSifre() != null && teacher.getSifre().equals(loginRequest.getSifre())) {
                 return ResponseEntity.ok(teacher);
+            } else {
+                return ResponseEntity.status(401).body("Sifre hatali!");
             }
         }
 
-        return ResponseEntity.status(401).body("Hatali e-posta veya sifre!");
+        return ResponseEntity.status(401).body("Bu e-posta adresiyle kayitli ogretmen bulunamadi!");
     }
 
     @GetMapping("/class/{classCode}/dashboard")

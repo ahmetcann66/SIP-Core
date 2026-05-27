@@ -86,21 +86,26 @@ public class StudentController {
     // GIRIS
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Student student) {
-        if (student.getEmail() == null) {
+        if (student.getEmail() == null || student.getEmail().isBlank()) {
             return ResponseEntity.badRequest().body("E-posta bos olamaz!");
         }
         String emailNorm = student.getEmail().trim().toLowerCase();
         String sifre = student.getSifre();
 
-        try {
-            System.out.println("DEBUG StudentController.login payload -> email='" + emailNorm + "'");
-        } catch (Exception e) {}
+        System.out.println("GIRIS ISTEGI -> Email: [" + emailNorm + "]");
 
-        Optional<Student> found = studentRepository.findByEmailAndSifre(emailNorm, sifre);
-        if (found.isPresent()) {
-            return ResponseEntity.ok(found.get());
+        Optional<Student> foundEmail = studentRepository.findByEmail(emailNorm);
+        if (foundEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body("Bu e-posta adresiyle kayitli bir ogrenci bulunamadi!");
+        }
+
+        Student s = foundEmail.get();
+        if (s.getSifre() != null && s.getSifre().equals(sifre)) {
+            System.out.println("GIRIS BASARILI -> " + emailNorm);
+            return ResponseEntity.ok(s);
         } else {
-            return ResponseEntity.badRequest().body("E-posta veya sifre hatali!");
+            System.out.println("GIRIS HATALI -> Sifre yanlis: " + emailNorm);
+            return ResponseEntity.badRequest().body("Sifre hatali!");
         }
     }
 
