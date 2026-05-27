@@ -39,15 +39,54 @@ public class ApiClient : IApiClient
         {
             var json = JsonSerializer.Serialize(request, JsonOptions);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/auth/login", content);
-            if (!response.IsSuccessStatusCode) return null;
+            // legacy payload expected by /api/students endpoints uses 'sifre' instead of 'password'
+            var emailNorm = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
+            var legacyPayload = JsonSerializer.Serialize(new { email = emailNorm, sifre = request.Password });
+            var legacyContent = new StringContent(legacyPayload, System.Text.Encoding.UTF8, "application/json");
+            // Try the newer auth endpoint first, fall back to legacy student login if not present
+            HttpResponseMessage response = null;
+            try {
+                LogMessage($"LoginAsync: POST api/auth/login -> PayloadLength={json.Length}");
+                response = await _httpClient.PostAsync("api/auth/login", content);
+                LogMessage($"LoginAsync: api/auth/login returned {response.StatusCode}");
+            } catch { /* ignore and try fallback */ }
+
+            if (response == null || !response.IsSuccessStatusCode)
+            {
+                try {
+                    LogMessage($"LoginAsync: Falling back to api/students/login -> LegacyPayloadLength={legacyPayload.Length}");
+                    response = await _httpClient.PostAsync("api/students/login", legacyContent);
+                    LogMessage($"LoginAsync: api/students/login returned {response.StatusCode}");
+                } catch { return null; }
+            }
+
+            if (response == null || !response.IsSuccessStatusCode) return null;
+
             var resp = await response.Content.ReadAsStringAsync();
+            LogMessage($"LoginAsync: Response content length={resp?.Length}");
+            // First try to parse as AuthResponse (token-based)
             var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
-            if (auth is not null)
+            if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
             {
                 SetAuthorizationToken(auth.Token);
+                return auth;
             }
-            return auth;
+
+            // Fallback: backend returned a Student-like object. Extract id and synthesize a token.
+            try {
+                using var doc = JsonDocument.Parse(resp);
+                if (doc.RootElement.TryGetProperty("id", out var idProp))
+                {
+                    var idStr = idProp.GetRawText();
+                    // create a lightweight synthesized token so mobile can treat user as authenticated
+                    var syntheticToken = $"student:{idStr}";
+                    SetAuthorizationToken(syntheticToken);
+                    LogMessage($"LoginAsync: Synthesized token for student id {idStr}");
+                    return new AuthResponse(syntheticToken, 0, null);
+                }
+            } catch { /* ignore parse errors */ }
+
+            return null;
         }
         catch (Exception ex)
         {
@@ -62,15 +101,51 @@ public class ApiClient : IApiClient
         {
             var json = JsonSerializer.Serialize(request, JsonOptions);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/auth/register", content);
-            if (!response.IsSuccessStatusCode) return null;
+            HttpResponseMessage response = null;
+            try {
+                LogMessage($"RegisterAsync: POST api/auth/register -> PayloadLength={json.Length}");
+                response = await _httpClient.PostAsync("api/auth/register", content);
+                LogMessage($"RegisterAsync: api/auth/register returned {response.StatusCode}");
+            } catch { /* ignore and try fallback */ }
+
+            if (response == null || !response.IsSuccessStatusCode)
+            {
+                try {
+                    // legacy payload for students.register expects 'sifre'
+                    var emailNorm = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
+                    var legacyPayload = JsonSerializer.Serialize(new { email = emailNorm, sifre = request.Password });
+                    var legacyContent = new StringContent(legacyPayload, System.Text.Encoding.UTF8, "application/json");
+                    LogMessage($"RegisterAsync: Falling back to api/students/register -> LegacyPayloadLength={legacyPayload.Length}");
+                    response = await _httpClient.PostAsync("api/students/register", legacyContent);
+                    LogMessage($"RegisterAsync: api/students/register returned {response.StatusCode}");
+                } catch { return null; }
+            }
+
+            if (response == null || !response.IsSuccessStatusCode) return null;
+
             var resp = await response.Content.ReadAsStringAsync();
+            LogMessage($"RegisterAsync: Response content length={resp?.Length}");
             var auth = JsonSerializer.Deserialize<AuthResponse>(resp, JsonOptions);
-            if (auth is not null)
+            if (auth is not null && !string.IsNullOrWhiteSpace(auth.Token))
             {
                 SetAuthorizationToken(auth.Token);
+                return auth;
             }
-            return auth;
+
+            // If server returned a Student object, synthesize token
+            try {
+                using var doc = JsonDocument.Parse(resp);
+                if (doc.RootElement.TryGetProperty("id", out var idProp))
+                {
+                    var idStr = idProp.GetRawText();
+                    var syntheticToken = $"student:{idStr}";
+                    SetAuthorizationToken(syntheticToken);
+                    LogMessage($"RegisterAsync: Synthesized token for student id {idStr}");
+                    return new AuthResponse(syntheticToken, 0, null);
+                }
+            } catch { }
+
+            return null;
         }
         catch (Exception ex)
         {
@@ -89,7 +164,51 @@ public class ApiClient : IApiClient
         try
         {
             LogMessage($"GET api/english-hub/state -> BaseAddress={_httpClient.BaseAddress}");
-            var response = await _httpClient.GetAsync("api/english-hub/state");
+            HttpResponseMessage? response = null;
+            try
+            {
+                response = await _httpClient.GetAsync("api/english-hub/state");
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"GetEnglishHubStateAsync initial attempt failed: {ex.Message}");
+            }
+
+            if (response == null || !response.IsSuccessStatusCode)
+            {
+                // Try fallbacks (useful for emulator host connectivity differences)
+                var originalBase = _httpClient.BaseAddress?.ToString() ?? string.Empty;
+                var fallbacks = new[] { "http://127.0.0.1:8080/", "http://10.0.2.2:8080/" };
+                foreach (var fb in fallbacks)
+                {
+                    if (string.Equals(fb, originalBase, StringComparison.OrdinalIgnoreCase)) continue;
+                    try
+                    {
+                        LogMessage($"GetEnglishHubStateAsync trying fallback BaseAddress={fb}");
+                        _httpClient.BaseAddress = new Uri(fb);
+                        response = await _httpClient.GetAsync("api/english-hub/state");
+                        if (response != null && response.IsSuccessStatusCode) break;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogMessage($"GetEnglishHubStateAsync fallback {fb} failed: {ex.Message}");
+                        continue;
+                    }
+                }
+
+                // restore original base address
+                if (!string.IsNullOrEmpty(originalBase))
+                {
+                    try { _httpClient.BaseAddress = new Uri(originalBase); } catch { }
+                }
+            }
+
+            if (response == null)
+            {
+                LogMessage($"GetEnglishHubStateAsync: No response from any endpoint");
+                return null;
+            }
+
             LogMessage($"Response Status={response.StatusCode}");
             if (response.IsSuccessStatusCode)
             {
@@ -97,6 +216,7 @@ public class ApiClient : IApiClient
                 LogMessage($"Response Content Length={content?.Length}");
                 return JsonSerializer.Deserialize<EnglishHubStateDto>(content, JsonOptions);
             }
+
             return null;
         }
         catch (Exception ex)

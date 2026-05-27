@@ -1,0 +1,14 @@
+#!/bin/sh
+# Prevent commits that contain changes to both web and mobile folders
+STAGED=$(git diff --cached --name-only)
+
+echo "$STAGED" | grep -E '^SIP_Frontend/' >/dev/null && WEB=1 || WEB=0
+echo "$STAGED" | grep -E '^SipCoreDotnet/' >/dev/null && MOB=1 || MOB=0
+
+if [ "$WEB" -eq 1 ] && [ "$MOB" -eq 1 ]; then
+  echo "ERROR: Commit contains changes in both SIP_Frontend/ and SipCoreDotnet/."
+  echo "Split changes into separate commits or repositories to keep web and mobile independent."
+  exit 1
+fi
+
+exit 0

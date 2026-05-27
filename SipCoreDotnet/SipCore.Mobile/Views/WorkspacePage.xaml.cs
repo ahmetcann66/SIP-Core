@@ -38,7 +38,7 @@ public partial class WorkspacePage : ContentPage
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+        await Services.AuthNavigation.EnsureAndNavigateAsync(this, async () => await Shell.Current.GoToAsync("DashboardPage"));
     }
 
     private void LoadWorkspace()

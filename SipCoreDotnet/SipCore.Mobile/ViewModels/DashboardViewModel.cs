@@ -129,7 +129,14 @@ public class DashboardViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.Navigation.PushAsync(new MainPage());
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("MainPage");
         }
         catch (Exception ex)
         {
@@ -153,7 +160,14 @@ public class DashboardViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.Navigation.PushAsync(new Views.SipCorePage());
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("SipCorePage");
         }
         catch (Exception ex)
         {
@@ -201,7 +215,14 @@ public class DashboardViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.Navigation.PushAsync(new Views.LevelSelectPage());
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("LevelSelectPage");
         }
         catch (Exception ex)
         {

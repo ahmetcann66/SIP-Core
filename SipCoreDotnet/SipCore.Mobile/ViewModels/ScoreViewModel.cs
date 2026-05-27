@@ -27,7 +27,14 @@ public class ScoreViewModel
     {
         try
         {
-            await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("DashboardPage");
         }
         catch (Exception ex)
         {

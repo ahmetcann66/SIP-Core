@@ -31,7 +31,17 @@ public class PomodoroViewModel : INotifyPropertyChanged
         ShortBreakCommand = new Command(() => SelectDuration(5));
         LongBreakCommand = new Command(() => SelectDuration(15));
         FocusCommand = new Command(() => SelectDuration(25));
-        GoDashboardCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new Views.DashboardPage()));
+        GoDashboardCommand = new Command(async () =>
+        {
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("DashboardPage");
+        });
     }
 
     public int SelectedMinutes

@@ -68,7 +68,8 @@ public class AuthViewModel : INotifyPropertyChanged
 
             StatusMessage = "Giriş yapılıyor...";
             var api = ServiceHelper.GetApiClient();
-            var auth = await api.LoginAsync(new AuthRequest(Email.Trim(), Password));
+            var normalizedEmail = (Email ?? string.Empty).Trim().ToLowerInvariant();
+            var auth = await api.LoginAsync(new AuthRequest(normalizedEmail, Password));
             if (auth is null)
             {
                 StatusMessage = "Giriş başarısız: bilgilerinizi kontrol edin";
@@ -76,7 +77,15 @@ public class AuthViewModel : INotifyPropertyChanged
             }
 
             StatusMessage = "Giriş başarılı";
-            await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            // Navigate to Dashboard as the new root to avoid leaving AuthPage on the stack
+            try
+            {
+                await Shell.Current.GoToAsync("//DashboardPage");
+            }
+            catch
+            {
+                await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            }
         }
         catch (Exception ex)
         {
@@ -97,7 +106,8 @@ public class AuthViewModel : INotifyPropertyChanged
 
             StatusMessage = "Kayıt gerçekleştiriliyor...";
             var api = ServiceHelper.GetApiClient();
-            var auth = await api.RegisterAsync(new AuthRequest(Email.Trim(), Password));
+            var normalizedEmail = (Email ?? string.Empty).Trim().ToLowerInvariant();
+            var auth = await api.RegisterAsync(new AuthRequest(normalizedEmail, Password));
             if (auth is null)
             {
                 StatusMessage = "Kayıt başarısız";
@@ -105,7 +115,15 @@ public class AuthViewModel : INotifyPropertyChanged
             }
 
             StatusMessage = "Kayıt başarılı";
-            await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            // After registration, navigate to Dashboard as root
+            try
+            {
+                await Shell.Current.GoToAsync("//DashboardPage");
+            }
+            catch
+            {
+                await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            }
         }
         catch (Exception ex)
         {
@@ -118,7 +136,23 @@ public class AuthViewModel : INotifyPropertyChanged
     {
         try
         {
-            await Shell.Current.Navigation.PopAsync();
+            // If user is not authenticated, ensure we return to the safe LandingPage root
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                try
+                {
+                    await Shell.Current.GoToAsync("//LandingPage");
+                    return;
+                }
+                catch { /* fallback to PopAsync below */ }
+            }
+
+            // Default: pop the current page
+            if (Shell.Current.Navigation.NavigationStack.Count > 0)
+            {
+                await Shell.Current.Navigation.PopAsync();
+            }
         }
         catch (Exception ex)
         {

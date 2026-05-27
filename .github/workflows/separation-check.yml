@@ -1,0 +1,47 @@
+name: Enforce Web/Mobile Separation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ '**' ]
+
+jobs:
+  check-separation:
+    name: Check changed folders for cross-contamination
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine base and head
+        id: refs
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          echo "BASE=${BASE}" >> $GITHUB_ENV
+          echo "HEAD=${HEAD}" >> $GITHUB_ENV
+
+      - name: Fetch refs
+        run: |
+          git fetch --no-tags --prune origin $BASE $HEAD || true
+
+      - name: List changed files
+        run: |
+          git diff --name-only $BASE $HEAD > changed_files.txt || true
+          echo "---- Changed files ----"
+          cat changed_files.txt || true
+
+      - name: Fail if both web and mobile changed
+        run: |
+          WEB=$(grep -E '^SIP_Frontend/' changed_files.txt || true)
+          MOB=$(grep -E '^SipCoreDotnet/' changed_files.txt || true)
+          if [ -n "$WEB" ] && [ -n "$MOB" ]; then
+            echo "ERROR: Commit/PR contains changes in both SIP_Frontend/ and SipCoreDotnet/."
+            echo "Split changes into separate commits or repositories to keep web and mobile independent."
+            exit 1
+          fi
+          echo "Separation check passed"

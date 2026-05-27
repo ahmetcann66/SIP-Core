@@ -35,7 +35,17 @@ public class ExamPracticeViewModel : INotifyPropertyChanged
         StartPracticeCommand = new Command(StartPractice);
         AnswerCommand = new Command<string>(SelectAnswer);
         NextQuestionCommand = new Command(GoNextQuestion);
-        GoDashboardCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new Views.DashboardPage()));
+        GoDashboardCommand = new Command(async () =>
+        {
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("DashboardPage");
+        });
     }
 
     public ObservableCollection<ExamDefinition> Exams { get; }

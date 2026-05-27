@@ -80,6 +80,11 @@ public class StudentController {
     // GIRIS
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Student student) {
+        try {
+            System.out.println("DEBUG StudentController.login payload -> email='" + student.getEmail() + "' sifre='" + student.getSifre() + "'");
+        } catch (Exception e) {
+            System.out.println("DEBUG StudentController.login: failed to read payload: " + e.getMessage());
+        }
         Optional<Student> found = studentRepository.findByEmailAndSifre(student.getEmail(), student.getSifre());
         if (found.isPresent()) {
             return ResponseEntity.ok(found.get());

@@ -36,7 +36,7 @@ public partial class RoadMapPage : ContentPage
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
-        await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+        await Services.AuthNavigation.EnsureAndNavigateAsync(this, async () => await Shell.Current.GoToAsync("DashboardPage"));
     }
 
     private void BuildRoadMap(string? topic)

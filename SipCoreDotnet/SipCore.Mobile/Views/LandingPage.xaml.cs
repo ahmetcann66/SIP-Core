@@ -11,12 +11,14 @@ public partial class LandingPage : ContentPage
         BindingContext = new LandingViewModel();
     }
 
-    private async void OnAuthClicked(object? sender, EventArgs e)
+
+
+    private async void OnDashboardClicked(object? sender, EventArgs e)
     {
         try
         {
-            // Push an AuthPage instance to avoid Shell route ambiguity
-            await Shell.Current.Navigation.PushAsync(new Views.AuthPage());
+            // Require auth before opening Dashboard
+            await Services.AuthNavigation.EnsureAndNavigateAsync(this, async () => await Shell.Current.GoToAsync("DashboardPage"));
         }
         catch (Exception ex)
         {
@@ -24,12 +26,25 @@ public partial class LandingPage : ContentPage
         }
     }
 
-    private async void OnDashboardClicked(object? sender, EventArgs e)
+    private async void OnEnglishHubClicked(object? sender, EventArgs e)
     {
         try
         {
-            // Push a DashboardPage instance to avoid Shell route ambiguity
-            await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+            // Require auth before opening English Hub (MainPage)
+            await Services.AuthNavigation.EnsureAndNavigateAsync(this, async () => await Shell.Current.GoToAsync("MainPage"));
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Navigation failed: {ex.Message}");
+        }
+    }
+
+    private async void OnSipPanelClicked(object? sender, EventArgs e)
+    {
+        try
+        {
+            // Require auth before opening SIP Panel (DashboardPage)
+            await Services.AuthNavigation.EnsureAndNavigateAsync(this, async () => await Shell.Current.GoToAsync("DashboardPage"));
         }
         catch (Exception ex)
         {

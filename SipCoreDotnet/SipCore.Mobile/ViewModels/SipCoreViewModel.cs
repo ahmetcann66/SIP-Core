@@ -18,7 +18,17 @@ public class SipCoreViewModel
             "Performans İzleme"
         };
 
-        GoDashboardCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new Views.DashboardPage()));
+        GoDashboardCommand = new Command(async () =>
+        {
+            var token = Services.TokenService.GetToken();
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                await Shell.Current.GoToAsync("AuthPage");
+                return;
+            }
+
+            await Shell.Current.GoToAsync("DashboardPage");
+        });
         GoHistoryCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new Views.HistoryPage()));
         GoScoreCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new Views.ScorePage()));
         selectModuleCommand = new Command<string>(async module => await ShowModuleAsync(module));

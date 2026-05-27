@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using SipCore.Mobile.ViewModels;
+using SipCore.Mobile.Services;
 
 namespace SipCore.Mobile;
 
@@ -83,11 +84,28 @@ public partial class MainPage : ContentPage
 
     private async void OnOpenLevelsClicked(object sender, EventArgs e)
     {
-        await Shell.Current.Navigation.PushAsync(new Views.LevelSelectPage());
+        await Shell.Current.GoToAsync("LevelSelectPage");
     }
 
     private async void OnOpenDashboardClicked(object sender, EventArgs e)
     {
-        await Shell.Current.Navigation.PushAsync(new Views.DashboardPage());
+        var token = TokenService.GetToken();
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            await DisplayAlert("Giriş gerekli", "Dashboard'a erişmek için lütfen giriş yapın veya kayıt olun.", "Tamam");
+            try
+            {
+                await Shell.Current.Navigation.PushAsync(new Views.AuthPage());
+            }
+            catch
+            {
+                // Fallback to route-based navigation if direct push fails
+                await Shell.Current.GoToAsync("AuthPage");
+            }
+
+            return;
+        }
+
+        await Shell.Current.GoToAsync("DashboardPage");
     }
 }

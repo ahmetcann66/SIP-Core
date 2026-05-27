@@ -476,6 +476,28 @@ let localOgrenci = {
     sipXp: 0, sipLevel: 1, sipStreak: 0, sipLastDate: "", sipHistory:[]
 };
 
+// Authentication helper: return true only when we have a real user id from backend
+function isUserAuthenticated() {
+    try { return Boolean(localOgrenci && localOgrenci.id); } catch (e) { return false; }
+}
+
+// Require authentication before showing a protected screen. If target is the SIP dashboard,
+// prefer calling its preparer (`sipDashboardHazirla`) which includes its own checks.
+function requireAuthAndShow(target) {
+    try {
+        if (target === 'sipDashboardEkrani') {
+            try { sipDashboardHazirla(); } catch(e) { ekranGoster('authEkrani'); }
+            return;
+        }
+        if (!isUserAuthenticated()) {
+            try { alert('Lütfen sisteme giriş yapın veya kayıt olun.'); } catch(e){}
+            try { ekranGoster('authEkrani'); } catch(e){}
+            return;
+        }
+        ekranGoster(target);
+    } catch (e) { console.warn('requireAuthAndShow failed', e); ekranGoster('authEkrani'); }
+}
+
 let aktifSoruHavuzu = {
     sinav: "",
     yil: "",
@@ -1135,7 +1157,13 @@ function initSiteNavbar() {
         el.addEventListener('click', (event) => {
             event.preventDefault();
             const target = el.getAttribute('data-nav-target');
-            if (target) ekranGoster(target);
+            if (!target) return;
+            // Protect selected screens behind authentication
+            if (['sipDashboardEkrani','anaKapiEkrani','seviyeSecimEkrani'].includes(target)) {
+                requireAuthAndShow(target);
+            } else {
+                ekranGoster(target);
+            }
         });
     });
     const brand = document.getElementById('navBrandHome');
@@ -1189,7 +1217,7 @@ function initAppClickDelegation() {
 
         if (target.closest('#gatewayEnglishCard')) {
             event.preventDefault();
-            ekranGoster('seviyeSecimEkrani');
+            requireAuthAndShow('seviyeSecimEkrani');
             return;
         }
         if (target.closest('#gatewaySipCard')) {
@@ -1683,9 +1711,9 @@ window.addEventListener('DOMContentLoaded', () => {
     // Bind migrated static handlers
     try {
         const landingBtn = document.getElementById('landingCtaBtn'); if (landingBtn) landingBtn.addEventListener('click', ()=> ekranGoster('authEkrani'));
-        const gatewayEnglish = document.getElementById('gatewayEnglishCard'); if (gatewayEnglish) gatewayEnglish.addEventListener('click', ()=> ekranGoster('seviyeSecimEkrani'));
+        const gatewayEnglish = document.getElementById('gatewayEnglishCard'); if (gatewayEnglish) gatewayEnglish.addEventListener('click', ()=> requireAuthAndShow('seviyeSecimEkrani'));
         const gatewaySip = document.getElementById('gatewaySipCard'); if (gatewaySip) gatewaySip.addEventListener('click', ()=> sipDashboardHazirla());
-        const btnToGate = document.getElementById('btnToGate'); if (btnToGate) btnToGate.addEventListener('click', ()=> ekranGoster('anaKapiEkrani'));
+        const btnToGate = document.getElementById('btnToGate'); if (btnToGate) btnToGate.addEventListener('click', ()=> requireAuthAndShow('anaKapiEkrani'));
 
         const pPom = document.getElementById('premiumShortcutPomodoro'); if (pPom) pPom.addEventListener('click', ()=> pomodoroEkraniAc());
         const pSin = document.getElementById('premiumShortcutSinav'); if (pSin) pSin.addEventListener('click', ()=> ekranGoster('sipSinavEkrani'));
@@ -1732,7 +1760,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.back-to-dashboard').forEach(b => b.addEventListener('click', ()=> sipDashboardHazirla()));
 
-        const btnChangeLevel = document.getElementById('btnChangeLevel'); if (btnChangeLevel) btnChangeLevel.addEventListener('click', ()=> ekranGoster('seviyeSecimEkrani'));
+        const btnChangeLevel = document.getElementById('btnChangeLevel'); if (btnChangeLevel) btnChangeLevel.addEventListener('click', ()=> requireAuthAndShow('seviyeSecimEkrani'));
         const btnHoca = document.getElementById('btnHocaDegistir'); if (btnHoca) btnHoca.addEventListener('click', ()=> ekranGoster('hocaSecimEkrani'));
     } catch(e) { console.warn('Delegated bindings failed', e); }
     // Handle core-tab and core-action delegation
@@ -1758,7 +1786,8 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch(e) { console.warn('Core delegation binding failed', e); }
     try {
         const sipPuanBtn = document.getElementById('sipPuanHesaplaBtn'); if (sipPuanBtn) sipPuanBtn.addEventListener('click', ()=> sipPuanHesapla());
-        document.querySelectorAll('.btn-go-back').forEach(b => b.addEventListener('click', ()=> goBack()));
+        // Ensure back-to-gate buttons always return to the main gate screen
+        document.querySelectorAll('.btn-go-back').forEach(b => b.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); try { ekranGoster('anaKapiEkrani', true); } catch(e) { goBack(); } }));
     } catch(e) { console.warn('Binding sipPuan/goBack failed', e); }
 
     try {
@@ -1771,9 +1800,14 @@ window.addEventListener('DOMContentLoaded', () => {
             const name = el.getAttribute('data-mascot'); const icon = el.getAttribute('data-mascot-icon'); if (name) hocaAyarla(name, icon||'');
         }));
 
-        // go-to-screen links
+        // go-to-screen links (handle protected screens specially)
         document.querySelectorAll('.go-to-screen').forEach(b => b.addEventListener('click', ()=> {
-            const t = b.getAttribute('data-target'); if (t) ekranGoster(t, true);
+            const t = b.getAttribute('data-target'); if (!t) return;
+            if (['sipDashboardEkrani','anaKapiEkrani','seviyeSecimEkrani'].includes(t)) {
+                requireAuthAndShow(t);
+            } else {
+                ekranGoster(t, true);
+            }
         }));
 
         // Teacher panel buttons
@@ -1892,6 +1926,12 @@ function demoContinue() {
 /* --- YENİ POMODORO & AKADEMİK GEÇMİŞ (DÖNGÜLÜ SİSTEM) --- */
 
 function sipDashboardHazirla() {
+    // Prevent opening the SIP Dashboard unless the user is authenticated.
+    if (!isUserAuthenticated()) {
+        try { alert('Lütfen sisteme giriş yapın veya kayıt olun.'); } catch(e){}
+        try { ekranGoster('authEkrani'); } catch(e){}
+        return;
+    }
     const todayStr = new Date().toLocaleDateString('tr-TR');
     if (!Array.isArray(localOgrenci.sipHistory)) {
         try { localOgrenci.sipHistory = localOgrenci.sipHistory ? JSON.parse(localOgrenci.sipHistory) : []; } catch (e) { localOgrenci.sipHistory = []; }

@@ -20,8 +20,11 @@ public static class MauiProgram
 		// Configure HTTP Client for API communication
 		builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
 		{
+			// On Android emulators we prefer localhost (127.0.0.1) and use adb reverse
+			// to forward device port to host. This avoids issues where 10.0.2.2 may fail
+			// to reach the host in some emulator/network setups.
 			var apiBaseUrl = OperatingSystem.IsAndroid()
-				? "http://10.0.2.2:8080"
+				? "http://127.0.0.1:8080"
 				: "http://localhost:8080";
 
 			client.BaseAddress = new Uri(apiBaseUrl);
