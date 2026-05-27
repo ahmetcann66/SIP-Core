@@ -1,92 +1,121 @@
-# S.I.P. Core: Eğitim Ekosistemi
+# S.I.P. Core: Akıllı Eğitim Ekosistemi ve Öğrenme DNA Analizi
 
-🚀 **Eğitim DNA Analizi Destekli Akıllı Öğrenme Platformu**
+🚀 **Platformlar Arası, Yapay Zeka Destekli Hibrit Öğrenme Platformu**
 
-[![License](https://img.shields.io/github/license/ahmetcann66/SIP-Core)](LICENSE)
-[![Languages](https://img.shields.io/github/languages/top/ahmetcann66/SIP-Core)](https://github.com/ahmetcann66/SIP-Core)
-[![Repo Size](https://img.shields.io/github/repo-size/ahmetcann66/SIP-Core)](https://github.com/ahmetcann66/SIP-Core)
-
----
-
-## 🌟 Proje Hakkında
-
-**S.I.P. Core**, öğrencilerin ve dil öğrenenlerin süreçlerini kişiselleştiren modern bir eğitim ekosistemidir. "Öğrenme DNA" analizi ile kullanıcının güçlü ve zayıf yönlerini belirler, buna uygun çalışma yolları sunar. Platform, hem kapsamlı bir **Web Arayüzü** hem de her an erişilebilir bir **Mobil Uygulama** üzerinden hizmet verir.
+![Architecture](https://img.shields.io/badge/Architecture-Clean--MVVM-blue)
+![Backend](https://img.shields.io/badge/Backend-Spring--Boot--4.0-green)
+![Frontend](https://img.shields.io/badge/Mobile-.NET--MAUI--8.0-purple)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 
-## 👨‍💻 Kullanılan Teknolojiler
-
-- **Backend:** Java / Spring Boot (REST API, WebSocket, Hibernate, MySQL)
-- **Mobil:** C# / .NET MAUI (Android, Windows Desktop)
-- **Web:** JavaScript, HTML5, CSS3, Bootstrap 5
-- **İletişim:** WebSocket (Gerçek zamanlı etkileşim)
-- **Veri Saklama:** MySQL & Preferences (Local Storage)
+## 📖 Proje Vizyonu
+**S.I.P. Core**, öğrenme sürecini statik bir yapıdan çıkarıp dinamik ve kişiselleştirilmiş bir deneyime dönüştüren akademik bir ekosistemdir. Projenin temel odağı, kullanıcının etkileşim verilerini analiz ederek bir **"Öğrenme DNA'sı"** oluşturmak ve bu veriye dayanarak gelişim yol haritası sunmaktır.
 
 ---
 
-## 🧩 Temel Modüller
+## 🏛️ Sistem Mimarisi (Architectural Overview)
 
-### 🌍 English Hub
-A1'den C2 seviyesine kadar geniş kelime havuzu, interaktif flashcard'lar ve yasaklı kelimeler (Tabu) oyunu ile dil öğrenimini eğlenceli hale getirir.
+Proje, üç ana katman üzerinde inşa edilmiş hibrit bir mimariye sahiptir. Aşağıdaki şemada veri akışı ve bileşenlerin etkileşimi görülmektedir:
 
-### 🚀 SIP Dashboard
-Deneme sınavları, skor takibi, gelişim grafikleri ve çalışma notlarının bulunduğu kişisel yönetim merkezi.
+```mermaid
+graph TD
+    subgraph "İstemci Katmanı (Client Layer)"
+        A[Mobile App - .NET MAUI]
+        B[Web Interface - JS/Bootstrap]
+    end
 
-### ⏱️ Pomodoro Masası
-Odaklanmayı artıran zaman yönetimi tekniği. Sesli hatırlatıcılar ve seans geçmişi ile verimli çalışma sağlar.
+    subgraph "Servis Katmanı (Backend Layer)"
+        C[Spring Boot API]
+        D[WebSocket Manager]
+        E[AI Analysis Engine]
+    end
 
-### 🧠 SIP Core AI
-Kullanıcının öğrenme alışkanlıklarını analiz ederek kişiye özel "Öğrenme DNA" raporu oluşturur ve yapay zeka destekli materyal üretir.
+    subgraph "Veri Katmanı (Data Layer)"
+        F[(MySQL Database)]
+        G[Local Preferences]
+    end
 
----
-
-## 🗂️ Proje Yapısı
-
-```
-SIP-Core/
-├── backend/        # Spring Boot tabanlı Java API Sunucusu
-├── SipCoreDotnet/  # .NET MAUI Mobil & Masaüstü Uygulaması
-├── SIP_Frontend/   # Web Arayüzü (HTML, JS, CSS)
-└── run_backend.bat # Tek tıkla backend başlatma scripti
+    A <-->|REST / JSON| C
+    B <-->|REST / JSON| C
+    A <-->|WS / Real-time| D
+    C <--> E
+    C <--> F
+    A <--> G
 ```
 
 ---
 
-## ⚡ Hızlı Başlatma
+## 🛠️ Teknik Derinlik ve Bileşen Analizi
 
-### 1️⃣ Backend'i Başlatma
-`run_backend.bat` dosyasına çift tıklayarak veya manuel olarak:
-```bash
-cd backend
-mvnw spring-boot:run
+### 1. Backend: Java Spring Boot Mimarisi
+Sunucu tarafı, **Domain-Driven Design (DDD)** prensiplerine yakın bir katmanlı mimari kullanır:
+-   **Controllers:** REST uç noktalarını (Endpoints) yönetir. (Örn: `EnglishHubController.java`)
+-   **Services:** İş mantığının (Business Logic) koordine edildiği merkezdir.
+-   **Repositories:** Spring Data JPA ve Hibernate ile veri tabanı soyutlaması sağlar.
+-   **DTOs:** İstemci ve sunucu arasındaki veri transferini optimize eder.
+
+### 2. Mobil: .NET MAUI & MVVM
+Mobil uygulama, modern yazılım geliştirme standartlarına uygun olarak **Model-View-ViewModel (MVVM)** desenini benimser:
+-   **View:** XAML tabanlı deklaratif arayüz.
+-   **ViewModel:** Veri bağlama (Data Binding) ve komut (Command) yönetimi.
+-   **Services:** `ApiClient.cs` üzerinden soyutlanmış ağ erişimi.
+-   **Abstraction:** `IApiClient` arayüzü sayesinde test edilebilir ve esnek yapı.
+
+---
+
+## 🧩 Modüler Fonksiyonlar
+
+| Modül | Teknik Açıklama | Kullanıcı Kazanımı |
+| :--- | :--- | :--- |
+| **Öğrenme DNA'sı** | Heuristic analiz algoritmaları kullanır. | Güçlü ve zayıf yönlerin keşfi. |
+| **English Hub** | Seviye bazlı (A1-C2) dinamik içerik yükleme. | Bağlamsal kelime öğrenimi ve Tabu oyunu. |
+| **SIP Dashboard** | Veri görselleştirme ve metrik takibi. | Tüm akademik sürecin tek noktadan yönetimi. |
+| **Pomodoro** | Multithreaded zamanlayıcı ve sesli servisler. | Yüksek odaklanma ve verimli çalışma seansları. |
+
+---
+
+## 🔄 Veri Akış Şeması (Öğrenme DNA Analizi)
+
+Kullanıcının yaptığı her etkileşim, sistem tarafından şu döngü ile işlenir:
+
+```mermaid
+sequenceDiagram
+    participant U as Kullanıcı (Mobil/Web)
+    participant B as Backend API
+    participant AI as AI Engine
+    participant DB as Veri Tabanı
+
+    U->>B: Aktivite Verisi (Soru Çözme, Pomodoro)
+    B->>DB: Veriyi Kaydet
+    B->>AI: Analiz İsteği Gönder
+    AI-->>B: DNA Raporu Oluştur (JSON)
+    B-->>U: Kişiselleştirilmiş Öneri Sun
 ```
-> Sunucu varsayılan olarak `http://localhost:8080` portunda çalışır.
-
-### 2️⃣ Mobil Uygulamayı Çalıştırma
-Görsel arayüz için Android Emülatör veya Windows üzerinde:
-```bash
-cd SipCoreDotnet/SipCore.Mobile
-dotnet build -t:Run -f net8.0-android  # Android için
-```
-
-### 3️⃣ Web Arayüzüne Erişim
-`SIP_Frontend/index.html` dosyasını tarayıcınızda açmanız yeterlidir.
 
 ---
 
-## 🛡️ Erişim ve Kullanım
+## 🚀 Kurulum ve Entegrasyon
 
-Mobil uygulama, kullanıcı deneyimini pürüzsüz hale getirmek için **kayıt/giriş zorunluluğu olmadan** doğrudan tüm özelliklere erişim imkanı sunar. Tüm veriler yerel olarak senkronize edilir ve backend ile entegre çalışır.
+> [!IMPORTANT]
+> Projeyi çalıştırmadan önce MySQL sunucunuzun aktif olduğundan ve `application.properties` dosyasındaki ayarların doğruluğundan emin olun.
+
+### Hızlı Başlatma (Quick Start)
+1.  **Backend:** `run_backend.bat` dosyasını çalıştırın.
+2.  **Mobil:** `SipCoreDotnet/SipCore.Mobile` dizinine gidin ve `dotnet build -t:Run -f net8.0-android` komutunu verin.
+3.  **Web:** `SIP_Frontend/index.html` dosyasını tarayıcıda açın.
 
 ---
 
-## 📬 İletişim
-
-📧 ahmetcanbozkurt295@gmail.com  
-🐞 [GitHub Issues](https://github.com/ahmetcann66/SIP-Core/issues)
+## 🛡️ Güvenlik ve Erişim Yaklaşımı
+Proje, geliştirme aşamasında **Erişilebilirlik Odaklı** bir yaklaşım sergiler. Mobil uygulamada kayıt zorunluluğu kaldırılarak, öğrenicilerin platformun teknik yeteneklerini anında deneyimlemesi hedeflenmiştir. Tüm ağ trafiği JSON standardında ve RESTful mimaridedir.
 
 ---
 
-## 📝 Lisans
+## 📬 İletişim & Akademik Destek
 
-Bu proje MIT Lisansı ile lisanslanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasını inceleyin.
+📧 **E-posta:** ahmetcanbozkurt295@gmail.com  
+🔗 **GitHub:** [ahmetcann66](https://github.com/ahmetcann66)
+
+---
+*© 2026 S.I.P. Core - Modern Eğitim Teknolojileri Grubu*
