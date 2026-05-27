@@ -1,6 +1,6 @@
-# SIP-Core
+# S.I.P. Core: Eğitim Ekosistemi
 
-🚀 **SIP, VoIP, ve Gerçek Zamanlı Haberleşme İçin Açık Kaynak Çatı**
+🚀 **Eğitim DNA Analizi Destekli Akıllı Öğrenme Platformu**
 
 [![License](https://img.shields.io/github/license/ahmetcann66/SIP-Core)](LICENSE)
 [![Languages](https://img.shields.io/github/languages/top/ahmetcann66/SIP-Core)](https://github.com/ahmetcann66/SIP-Core)
@@ -8,32 +8,35 @@
 
 ---
 
-## 🌟 Proje Amacı
+## 🌟 Proje Hakkında
 
-**SIP-Core**, modern telekomünikasyon altyapısı, VoIP (Voice over IP) ve gerçek zamanlı iletişim uygulamaları için; platformlar arası çalışabilen, ölçeklenebilir, modüler ve açık kaynaklı bir temel sunmayı hedefler. Hem akademik hem de sektörel olarak kullanılabilir.
+**S.I.P. Core**, öğrencilerin ve dil öğrenenlerin süreçlerini kişiselleştiren modern bir eğitim ekosistemidir. "Öğrenme DNA" analizi ile kullanıcının güçlü ve zayıf yönlerini belirler, buna uygun çalışma yolları sunar. Platform, hem kapsamlı bir **Web Arayüzü** hem de her an erişilebilir bir **Mobil Uygulama** üzerinden hizmet verir.
 
 ---
 
 ## 👨‍💻 Kullanılan Teknolojiler
 
-- **Java / Spring Boot:** Sunucu uygulaması ve API servisi
-- **C# / .NET MAUI:** Masaüstü ve mobil istemci uygulamaları (Windows, macOS, Android, iOS)
-- **JavaScript:** Web tarafı istemci iş mantığı
-- **HTML / CSS:** Modern, responsive web arayüzü
-- **PowerShell:** Sistem yönetimi ve otomasyon betikleri
-- **WebSocket:** Gerçek zamanlı, düşük gecikmeli iletişim
+- **Backend:** Java / Spring Boot (REST API, WebSocket, Hibernate, MySQL)
+- **Mobil:** C# / .NET MAUI (Android, Windows Desktop)
+- **Web:** JavaScript, HTML5, CSS3, Bootstrap 5
+- **İletişim:** WebSocket (Gerçek zamanlı etkileşim)
+- **Veri Saklama:** MySQL & Preferences (Local Storage)
 
 ---
 
-## 🧩 Ana Özellikler
+## 🧩 Temel Modüller
 
-- SIP (Session Initiation Protocol) desteği
-- Gerçek zamanlı sesli/görüntülü iletişim ve mesajlaşma
-- WebSocket üzerinden hızlı ve güvenli bağlantı
-- RESTful API ile kolay entegrasyon
-- Modern tasarıma sahip web ve mobil arayüzler
-- Güçlü güvenlik: Kimlik doğrulama, JWT, TLS
-- Mikroservis mimarisiyle ölçeklenebilirlik
+### 🌍 English Hub
+A1'den C2 seviyesine kadar geniş kelime havuzu, interaktif flashcard'lar ve yasaklı kelimeler (Tabu) oyunu ile dil öğrenimini eğlenceli hale getirir.
+
+### 🚀 SIP Dashboard
+Deneme sınavları, skor takibi, gelişim grafikleri ve çalışma notlarının bulunduğu kişisel yönetim merkezi.
+
+### ⏱️ Pomodoro Masası
+Odaklanmayı artıran zaman yönetimi tekniği. Sesli hatırlatıcılar ve seans geçmişi ile verimli çalışma sağlar.
+
+### 🧠 SIP Core AI
+Kullanıcının öğrenme alışkanlıklarını analiz ederek kişiye özel "Öğrenme DNA" raporu oluşturur ve yapay zeka destekli materyal üretir.
 
 ---
 
@@ -41,89 +44,44 @@
 
 ```
 SIP-Core/
-├── server/         # Spring Boot tabanlı Java backend (API & SIP servisleri)
-├── client/         # .NET MAUI tabanlı masaüstü & mobil istemci
-├── web-client/     # Web arayüzü (JS, HTML, CSS)
-├── scripts/        # Otomasyon ve yardımcı betikler (PowerShell)
-└── docs/           # Belgeler ve şemalar
+├── backend/        # Spring Boot tabanlı Java API Sunucusu
+├── SipCoreDotnet/  # .NET MAUI Mobil & Masaüstü Uygulaması
+├── SIP_Frontend/   # Web Arayüzü (HTML, JS, CSS)
+└── run_backend.bat # Tek tıkla backend başlatma scripti
 ```
 
 ---
 
-## ⚡ Kurulum ve Çalıştırma Adımları
+## ⚡ Hızlı Başlatma
 
-### 1️⃣ Sunucu (Java / Spring Boot)
-
+### 1️⃣ Backend'i Başlatma
+`run_backend.bat` dosyasına çift tıklayarak veya manuel olarak:
 ```bash
-git clone https://github.com/ahmetcann66/SIP-Core.git
-cd SIP-Core/server
-./mvnw clean package
-java -jar target/sip-core-server.jar
+cd backend
+mvnw spring-boot:run
 ```
+> Sunucu varsayılan olarak `http://localhost:8080` portunda çalışır.
 
-### 2️⃣ Masaüstü/Mobil İstemci (.NET MAUI)
-
-.NET MAUI için:
-
+### 2️⃣ Mobil Uygulamayı Çalıştırma
+Görsel arayüz için Android Emülatör veya Windows üzerinde:
 ```bash
-cd SIP-Core/client
-dotnet restore
-dotnet build
-dotnet run
-```
-> Gerekli bağımlılıkların yüklü olduğundan emin olun: [.NET 8+ SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-
-### 3️⃣ Web İstemci
-
-```bash
-cd SIP-Core/web-client
-npm install
-npm start
-```
-Tarayıcı üzerinden: `http://localhost:3000`
-
----
-
-## 🛰️ Uygulama Akış Şeması
-
-```mermaid
-graph LR
-    A[Web/Mobil/Masaüstü] -->|WebSocket/HTTP| B(SIP-Core API Server)
-    B --> C[SIP/SIP Proxy]
-    C --> D[Media Gateway]
-    B --> E[Veritabanı]
+cd SipCoreDotnet/SipCore.Mobile
+dotnet build -t:Run -f net8.0-android  # Android için
 ```
 
----
-
-## 🛡️ Güvenlik ve Kimlik Doğrulama
-
-- JWT tabanlı kimlik doğrulama
-- WebSocket üzerinden güvenli bağlantı (WSS, TLS)
-- Kullanıcı kaydı ve rol tabanlı erişim
+### 3️⃣ Web Arayüzüne Erişim
+`SIP_Frontend/index.html` dosyasını tarayıcınızda açmanız yeterlidir.
 
 ---
 
-## 👏 Katkı Sağlama
+## 🛡️ Erişim ve Kullanım
 
-1. Fork oluşturun & yeni dal açın (`feature/özellik`).
-2. Değişiklik yapıp commit edin.
-3. Açıklamalı pull request açın.
-4. Kodunuzu test etmeyi ve dökümantasyonunuzu güncellemeyi unutmayın!
-
-> Ayrıntılı katkı rehberi için [CONTRIBUTING.md](CONTRIBUTING.md)'ye bakınız.
-
----
-
-## 📚 Akademik Atıf
-
-> ahmetcann66. (2026). SIP-Core [Açık kaynak yazılım]. https://github.com/ahmetcann66/SIP-Core
+Mobil uygulama, kullanıcı deneyimini pürüzsüz hale getirmek için **kayıt/giriş zorunluluğu olmadan** doğrudan tüm özelliklere erişim imkanı sunar. Tüm veriler yerel olarak senkronize edilir ve backend ile entegre çalışır.
 
 ---
 
 ## 📬 İletişim
 
-Sorular ve öneriler için:  
 📧 ahmetcanbozkurt295@gmail.com  
 🐞 [GitHub Issues](https://github.com/ahmetcann66/SIP-Core/issues)
 
