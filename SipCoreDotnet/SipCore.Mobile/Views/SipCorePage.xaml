@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.SipCorePage"
+             Shell.NavBarIsVisible="False"
+             Title="SIP Core AI"
+             BackgroundColor="#0F172A">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20,32,20,24" Spacing="20">
+            
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="🧠" FontSize="48" HorizontalTextAlignment="Center" />
+                <Label Text="SIP Core AI" FontSize="32" FontAttributes="Bold" TextColor="#F8FAFC" HorizontalTextAlignment="Center" />
+                <Label Text="Öğrenme DNA analizi ve AI destekli rehberlik" FontSize="14" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- DNA Analysis Section -->
+            <Frame Padding="18" CornerRadius="18" BackgroundColor="#1E293B" BorderColor="#6366F1" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="🧬" FontSize="28" VerticalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Öğrenme DNA Analizi" FontSize="18" FontAttributes="Bold" TextColor="#F8FAFC" />
+                            <Label Text="Güçlü ve zayıf yönlerini keşfet" FontSize="12" TextColor="#94A3B8" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <Label Text="Öğrenme stilinizi, güçlü ve zayıf yönlerinizi analiz ederek size özel bir öğrenme DNA'sı oluşturur. Bu analiz, kişiselleştirilmiş içerik ve öneriler sunar." FontSize="12" TextColor="#CBD5E1" LineBreakMode="WordWrap" />
+                    <Button Text="🧬 DNA Analizi Yap" Command="{Binding AnalyzeDnaCommand}" BackgroundColor="#6366F1" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Campaign/Goals Section -->
+            <Frame Padding="18" CornerRadius="18" BackgroundColor="#1E293B" BorderColor="#22C55E" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="🎯" FontSize="28" VerticalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Kampanya Oluştur" FontSize="18" FontAttributes="Bold" TextColor="#F8FAFC" />
+                            <Label Text="Hedeflerini belirle ve takip et" FontSize="12" TextColor="#94A3B8" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <Label Text="Haftalık veya aylık hedefler belirleyerek öğrenme sürecini organize et. Her kampanya, belirlenen hedeflere ulaşmak için günlük görevler içerir." FontSize="12" TextColor="#CBD5E1" LineBreakMode="WordWrap" />
+                    <Button Text="🎯 Yeni Kampanya Oluştur" Command="{Binding CreateCampaignCommand}" BackgroundColor="#22C55E" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- AI Material Generator Section -->
+            <Frame Padding="18" CornerRadius="18" BackgroundColor="#1E293B" BorderColor="#F59E0B" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="📚" FontSize="28" VerticalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Materyal Üretici" FontSize="18" FontAttributes="Bold" TextColor="#F8FAFC" />
+                            <Label Text="AI ile öğrenme materyalleri oluştur" FontSize="12" TextColor="#94A3B8" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <Label Text="Yapay zeka destekli materyal üretimi ile kendi seviyene uygun çalışma kağıtları, quizler ve özetler oluştur." FontSize="12" TextColor="#CBD5E1" LineBreakMode="WordWrap" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0" Text="📝 Çalışma Kağıdı" Command="{Binding GenerateWorksheetCommand}" BackgroundColor="#F59E0B" TextColor="White" CornerRadius="10" FontSize="12" />
+                        <Button Grid.Column="1" Text="📋 Quiz" Command="{Binding GenerateQuizCommand}" BackgroundColor="#D97706" TextColor="White" CornerRadius="10" FontSize="12" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- AI Assistant Section -->
+            <Frame Padding="18" CornerRadius="18" BackgroundColor="#1E293B" BorderColor="#EC4899" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="🤖" FontSize="28" VerticalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="AI Asistan" FontSize="18" FontAttributes="Bold" TextColor="#F8FAFC" />
+                            <Label Text="Soru sor, açıklama al" FontSize="12" TextColor="#94A3B8" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <Label Text="Herhangi bir konuda yapay zekaya soru sor ve detaylı açıklamalar al. Konu anlatımları, örnekler ve pratik ipuçları için AI asistanı kullan." FontSize="12" TextColor="#CBD5E1" LineBreakMode="WordWrap" />
+                    <Button Text="🤖 AI Asistanı Kullan" Command="{Binding UseAiAssistantCommand}" BackgroundColor="#EC4899" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Performance Monitoring Section -->
+            <Frame Padding="18" CornerRadius="18" BackgroundColor="#1E293B" BorderColor="#06B6D4" HasShadow="True">
+                <VerticalStackLayout Spacing="12">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="📊" FontSize="28" VerticalOptions="Center" />
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="Performans İzleme" FontSize="18" FontAttributes="Bold" TextColor="#F8FAFC" />
+                            <Label Text="İlerlemeni takip et" FontSize="12" TextColor="#94A3B8" />
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <Label Text="Günlük, haftalık ve aylık öğrenme performansını görüntüle. XP kazanımı, seviye atlama ve hedef tamamlama istatistiklerini incele." FontSize="12" TextColor="#CBD5E1" LineBreakMode="WordWrap" />
+                    <Button Text="📊 Performansı Görüntüle" Command="{Binding ViewPerformanceCommand}" BackgroundColor="#06B6D4" TextColor="White" CornerRadius="12" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- DNA Display Section -->
+            <Frame Padding="16" CornerRadius="16" BackgroundColor="#312E81" BorderColor="#818CF8" HasShadow="False"
+                   IsVisible="{Binding HasDna}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="🧬 Öğrenme DNA'n" FontSize="16" FontAttributes="Bold" TextColor="#E0E7FF" />
+                    <Label Text="{Binding DnaContent}" FontSize="13" TextColor="#C7D2FE" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Campaign Display Section -->
+            <Frame Padding="16" CornerRadius="16" BackgroundColor="#14532D" BorderColor="#4ADE80" HasShadow="False"
+                   IsVisible="{Binding HasCampaign}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="🎯 Aktif Kampanya" FontSize="16" FontAttributes="Bold" TextColor="#DCFCE7" />
+                    <Label Text="{Binding CampaignContent}" FontSize="13" TextColor="#BBF7D0" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Status Message -->
+            <Label Text="{Binding StatusMessage}" FontSize="12" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+
+            <!-- Bottom Navigation -->
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Button Grid.Column="0" Text="📜 Geçmiş" Command="{Binding GoHistoryCommand}" BackgroundColor="#475569" TextColor="White" CornerRadius="10" FontSize="12" Padding="10,12" />
+                <Button Grid.Column="1" Text="⭐ Skor" Command="{Binding GoScoreCommand}" BackgroundColor="#059669" TextColor="White" CornerRadius="10" FontSize="12" Padding="10,12" />
+                <Button Grid.Column="2" Text="📚 Deneme" Command="{Binding GoExamCommand}" BackgroundColor="#DC2626" TextColor="White" CornerRadius="10" FontSize="12" Padding="10,12" />
+            </Grid>
+
+            <!-- Back Button -->
+            <Button Text="← Dashboard'a Dön" Command="{Binding GoDashboardCommand}" BackgroundColor="#374151" TextColor="White" CornerRadius="12" FontSize="14" Padding="14,12" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

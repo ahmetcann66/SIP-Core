@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.ScorePage"
+             Title="Puanlar"
+             BackgroundColor="#F5F7FA">
+    
+    <VerticalStackLayout Padding="20" Spacing="16">
+        
+        <!-- Header -->
+        <VerticalStackLayout Spacing="8">
+            <Label Text="⭐ Puanlar" FontSize="28" FontAttributes="Bold" TextColor="#2C3E50" />
+            <Label Text="Başarı istatistikleri" FontSize="14" TextColor="#7F8C8D" />
+        </VerticalStackLayout>
+
+        <!-- Score Stats -->
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+            <Frame Grid.Column="0" Padding="16" CornerRadius="12" BorderColor="#F39C12" BackgroundColor="#FFF9E6" HasShadow="True">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="🏆" FontSize="32" HorizontalTextAlignment="Center" />
+                    <Label Text="Total" FontSize="12" TextColor="#95A5A6" HorizontalTextAlignment="Center" />
+                    <Label Text="2,350" FontSize="20" FontAttributes="Bold" TextColor="#F39C12" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Grid.Column="1" Padding="16" CornerRadius="12" BorderColor="#27AE60" BackgroundColor="#E8F8F5" HasShadow="True">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="🔥" FontSize="32" HorizontalTextAlignment="Center" />
+                    <Label Text="Çizgi" FontSize="12" TextColor="#95A5A6" HorizontalTextAlignment="Center" />
+                    <Label Text="15 Gün" FontSize="20" FontAttributes="Bold" TextColor="#27AE60" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+        <!-- Scores List -->
+        <Label Text="Puanlar Detayı" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50" />
+        
+        <ScrollView>
+            <CollectionView ItemsSource="{Binding ScoreItems}">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="32" Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="📭" FontSize="40" HorizontalTextAlignment="Center" />
+                        <Label Text="Henüz puan kaydı yok" TextColor="#95A5A6" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="14" Margin="0,6" CornerRadius="12" BorderColor="#E8F4F8" BackgroundColor="#FFFFFF" HasShadow="True">
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="4">
+                                    <Label Text="{Binding Title}" FontSize="14" FontAttributes="Bold" TextColor="#2C3E50" />
+                                    <Label Text="Bugün" FontSize="11" TextColor="#95A5A6" />
+                                </VerticalStackLayout>
+                                <Frame Grid.Column="1" Padding="12,8" CornerRadius="8" BackgroundColor="#3498DB" HasShadow="False">
+                                    <Label Text="{Binding Value, StringFormat='{0} puan'}" FontSize="12" FontAttributes="Bold" TextColor="White" />
+                                </Frame>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- Back Button -->
+        <Button Text="← Dashboard'a Dön"
+                Command="{Binding GoDashboardCommand}"
+                BackgroundColor="#95A5A6"
+                TextColor="White"
+                CornerRadius="8"
+                FontSize="13"
+                Padding="12,8" />
+    </VerticalStackLayout>
+</ContentPage>

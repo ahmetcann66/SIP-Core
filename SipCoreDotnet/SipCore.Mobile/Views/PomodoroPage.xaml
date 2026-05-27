@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SipCore.Mobile.Views.PomodoroPage"
+             Title="Pomodoro"
+             BackgroundColor="#F5F7FA">
+    
+    <VerticalStackLayout Padding="20" Spacing="20" VerticalOptions="FillAndExpand">
+        
+        <!-- Header -->
+        <VerticalStackLayout Spacing="8">
+            <Label Text="⏱️ Pomodoro Masası" FontSize="28" FontAttributes="Bold" TextColor="#2C3E50" />
+            <Label Text="Odaklanmış çalışma seansları" FontSize="14" TextColor="#7F8C8D" />
+        </VerticalStackLayout>
+
+        <!-- Timer Display -->
+        <Frame Padding="32" CornerRadius="20" BorderColor="#3498DB" BackgroundColor="#ECF0F1" HasShadow="True">
+            <VerticalStackLayout Spacing="12" HorizontalOptions="Center" VerticalOptions="Center">
+                  <Label Text="{Binding TimeLeftDisplay}" 
+                       FontSize="48" 
+                       FontAttributes="Bold" 
+                       TextColor="#2C3E50"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="{Binding StatusMessage}" 
+                       FontSize="14" 
+                       TextColor="#7F8C8D"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Session Type Buttons -->
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Seans Türü Seç" FontSize="12" FontAttributes="Bold" TextColor="#95A5A6" />
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <Frame Grid.Column="0" Padding="12" CornerRadius="12" BorderColor="#E67E22" BackgroundColor="#FFF3E0">
+                    <Button Text="🔴 Focus\n25 dk" 
+                            Command="{Binding FocusCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#E67E22"
+                            FontAttributes="Bold"
+                            FontSize="11"
+                            Padding="8,4" />
+                </Frame>
+                
+                <Frame Grid.Column="1" Padding="12" CornerRadius="12" BorderColor="#27AE60" BackgroundColor="#E8F8F5">
+                    <Button Text="🟢 Kısa\n5 dk" 
+                            Command="{Binding ShortBreakCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#27AE60"
+                            FontAttributes="Bold"
+                            FontSize="11"
+                            Padding="8,4" />
+                </Frame>
+                
+                <Frame Grid.Column="2" Padding="12" CornerRadius="12" BorderColor="#8E44AD" BackgroundColor="#F4ECF7">
+                    <Button Text="🟣 Uzun\n15 dk" 
+                            Command="{Binding LongBreakCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#8E44AD"
+                            FontAttributes="Bold"
+                            FontSize="11"
+                            Padding="8,4" />
+                </Frame>
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- Controls: Start / Pause / Lap / Stop -->
+        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+            <Button Grid.Column="0" Text="▶️ Başlat" 
+                Command="{Binding StartCommand}"
+                BackgroundColor="#3498DB"
+                TextColor="White"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                FontSize="16"
+                Padding="12"
+                HeightRequest="50" />
+
+            <Button Grid.Column="1" Text="⏸️ Duraklat" 
+                Command="{Binding PauseCommand}"
+                BackgroundColor="#F39C12"
+                TextColor="White"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                FontSize="16"
+                Padding="12"
+                HeightRequest="50" />
+
+            <Button Grid.Column="2" Text="🔁 Tur" 
+                Command="{Binding LapCommand}"
+                BackgroundColor="#8E44AD"
+                TextColor="White"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                FontSize="16"
+                Padding="12"
+                HeightRequest="50" />
+
+            <Button Grid.Column="3" Text="⏹️ Durdur" 
+                Command="{Binding StopCommand}"
+                BackgroundColor="#95A5A6"
+                TextColor="White"
+                CornerRadius="12"
+                FontAttributes="Bold"
+                FontSize="16"
+                Padding="12"
+                HeightRequest="50" />
+        </Grid>
+
+        <!-- Info Cards -->
+        <ScrollView>
+            <VerticalStackLayout Spacing="12">
+                <Frame Padding="16" CornerRadius="12" BorderColor="#BDC3C7" BackgroundColor="#FFFFFF">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="💡 Pomodoro Teknikleri" FontSize="13" FontAttributes="Bold" TextColor="#2C3E50" />
+                        <Label Text="• 25 dakika yoğun çalışma" FontSize="11" TextColor="#7F8C8D" />
+                        <Label Text="• 5 dakika kısa mola" FontSize="11" TextColor="#7F8C8D" />
+                        <Label Text="• 15 dakika uzun mola" FontSize="11" TextColor="#7F8C8D" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Padding="16" CornerRadius="12" BorderColor="#BDC3C7" BackgroundColor="#FFFFFF">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="📈 Ses Türü Seç" FontSize="13" FontAttributes="Bold" TextColor="#2C3E50" />
+                        <Label Text="{Binding StatusMessage}" FontSize="11" TextColor="#7F8C8D" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Back Button -->
+        <Button Text="← Dashboard'a Dön" 
+                Command="{Binding GoDashboardCommand}"
+                BackgroundColor="#95A5A6"
+                TextColor="White"
+                CornerRadius="8"
+                FontSize="13"
+                Padding="12,8" />
+    </VerticalStackLayout>
+</ContentPage>
